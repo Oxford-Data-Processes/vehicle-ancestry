@@ -1,35 +1,32 @@
 import streamlit as st
-import pandas as pd
-import fitz  # PyMuPDF
-import io
+from pdf_processor import (
+    app as pdf_processor,
+)  # Assuming you have a function called `process_pdf` in your pdf_processor module
 
-# Title of the application
-st.title("PDF Uploader")
+# Set the page to wide mode
+st.set_page_config(layout="wide")
 
-# File uploader allows user to add their own PDF
-uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
+# Define the navigation structure
+apps = {
+    "Home": "home",
+    "PDF Processor": "pdf_processor",
+    # Add other apps here
+}
 
-if uploaded_file is not None:
-    # To read file as bytes:
-    bytes_data = uploaded_file.getvalue()
+# Add a selectbox to the sidebar for navigation
+selected_app = st.sidebar.selectbox("Choose an app", list(apps.keys()))
 
-    # Displaying the file
-    st.write("Uploaded PDF file:")
 
-    # Load the PDF file
-    pdf = fitz.open("pdf", bytes_data)
-    page = pdf.load_page(0)  # 0 is the first page
-    pix = page.get_pixmap()
-    img_data = pix.tobytes("ppm")
-    pdf.close()
+# Define the Home page
+def home():
+    st.write("Welcome to the Home Page!")
 
-    # Convert to a format that streamlit can display
-    image = io.BytesIO(img_data)
-    st.image(image, caption="First page of the PDF", use_column_width=True)
 
-    # Generate and display test data as a dataframe
-    test_data = pd.read_csv("output.csv")
-    st.write("Displaying data:")
-    st.dataframe(test_data)
-else:
-    st.write("Please upload a PDF file to display the test data.")
+# Add other app functions here
+
+# Navigation
+if selected_app == "Home":
+    home()
+elif selected_app == "PDF Processor":
+    pdf_processor()
+# Add other navigation options here
