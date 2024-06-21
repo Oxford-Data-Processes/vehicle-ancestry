@@ -3,6 +3,8 @@ import pandas as pd
 import fitz  # PyMuPDF
 import io
 import pdfplumber
+import numpy as np
+import re
 
 
 def display_first_two_pdf_pages(pdf_bytes):
@@ -38,33 +40,49 @@ def display_first_two_pdf_pages(pdf_bytes):
 
 
 def extract_table_from_pdf(pdf_path, has_header):
-    data = []
+    dataframe_list = []
     header = None
+
     with pdfplumber.open(pdf_path) as pdf:
         for page_num, page in enumerate(pdf.pages, start=1):
-            # Extract table settings: Look for lines
             tables = page.extract_tables(
                 {"vertical_strategy": "lines", "horizontal_strategy": "lines"}
             )
 
-            for table in tables:
-                # If header is not set and has_header is True, set header and skip the first row
-                if has_header and header is None:
-                    header = table[0] + ["page"]
-                    start_row_index = 1
-                    continue  # Skip the rest of the loop to avoid adding the header as data
-
-                # If header is not set and has_header is False, create a default header
-                if header is None:
+            for table_index, table in enumerate(tables):
+                if has_header:
+                    if len(table) > 1:  # Ensure there is at least one row of data
+                        header = table[0] + ["page"]
+                        for row in table[1:]:
+                            if len(row) < len(header) - 1:
+                                row.extend([None] * (len(header) - 1 - len(row)))
+                            elif len(row) > len(header) - 1:
+                                row = row[: len(header) - 1]
+                            row.append(page_num)
+                        df = pd.DataFrame(table[1:], columns=header)
+                        dataframe_list.append(df)
+                else:
                     header = [f"column_{i}" for i in range(len(table[0]))] + ["page"]
-                    start_row_index = 0
+                    for row in table:
+                        if len(row) < len(header) - 1:
+                            row.extend([None] * (len(header) - 1 - len(row)))
+                        elif len(row) > len(header) - 1:
+                            row = row[: len(header) - 1]
+                        row.append(page_num)
+                    df = pd.DataFrame(table, columns=header)
+                    dataframe_list.append(df)
 
-                # Iterate over the table rows, starting from the appropriate index
-                for row in table[start_row_index:]:
-                    row_with_page = row + [page_num]
-                    data.append(row_with_page)
-
-    return header, data
+    if dataframe_list:
+        try:
+            df_extracted = pd.concat(dataframe_list)
+            df_extracted = df_extracted.replace("", None)
+            return df_extracted
+        except AssertionError as e:
+            return pd.DataFrame()
+    else:
+        return (
+            pd.DataFrame()
+        )  # Return an empty DataFrame if no tables were extracted or matched
 
 
 def update_headers(column_mappings, df, council):
@@ -75,37 +93,23 @@ def update_headers(column_mappings, df, council):
     return df
 
 
-def clean_dataframe(df, column_mappings, council):
+def clean_dataframe(df):
+    if "vrm.1" in df.columns:
+        df["vrm"] = np.where(df["vrm"].isnull(), df["vrm.1"], df["vrm"])
+        df["vrm"] = df["vrm"].fillna(method="ffill")
+        df.drop(columns=["vrm.1"], inplace=True)
+        df.drop_duplicates(inplace=True, subset=["vrm"])
+        df.reset_index(inplace=True, drop=True)
 
-    clean_headers = list(set(column_mappings[council].values()))
+    for column in ["make", "model"]:
+        if f"{column}.1" in df.columns:
+            df[column] = df[column].combine_first(df[f"{column}.1"])
+            df.drop(columns=[f"{column}.1"], inplace=True)
 
-    has_null = df[clean_headers].isnull().values.any()
-    if has_null:
-
-        # Initialize a list to hold the cleaned data
-        cleaned_data = []
-
-        # Iterate over the DataFrame rows
-        for index, row in df.iterrows():
-            # Initialize a dictionary to hold the non-null values for the current row
-            non_null_values = {header: None for header in clean_headers}
-
-            # Iterate over each header and collect the last non-null value if available
-            for header in clean_headers:
-
-                # Get all the values from the columns that were mapped to the current header
-                values = row[header].dropna().tolist()
-                if values:  # If there are any non-null values
-                    # Assign the last non-null value to the corresponding header in the dictionary
-                    non_null_values[header] = values[-1]
-
-            # Append the dictionary with non-null values to the cleaned data list
-            cleaned_data.append(non_null_values)
-
-        # Create a new DataFrame using the cleaned data
-        cleaned_df = pd.DataFrame(cleaned_data, columns=clean_headers)
-
-        return cleaned_df
+    if "vrm" in df.columns:
+        df = df.copy()[
+            df["vrm"].apply(lambda x: re.match(r"^[A-Z0-9\s]*$", str(x)) is not None)
+        ]
 
     return df
 
@@ -140,7 +144,7 @@ def app():
             "Renfrewshire": (2, False),
             "East Lothian": (3, False),
         }
-        number, has_header = council_mappings[council]
+        _, has_header = council_mappings[council]
 
         if st.button("Process PDF"):
             column_mappings = {
@@ -148,19 +152,16 @@ def app():
                 "Renfrewshire": {"column_1": "vrm", "column_2": "make"},
                 "East Lothian": {
                     "column_0": "vrm",
-                    "column_1": "vrm",
+                    "column_1": "vrm.1",
                     "column_3": "make",
-                    "column_4": "make",
+                    "column_4": "make.1",
                     "column_6": "model",
-                    "column_7": "model",
+                    "column_7": "model.1",
                 },
             }
-            header, table_data = extract_table_from_pdf(
-                uploaded_file, has_header=has_header
-            )
-            df = pd.DataFrame(table_data, columns=header)
+            df = extract_table_from_pdf(uploaded_file, has_header=has_header)
             df = update_headers(column_mappings, df, council)
-            df_clean = clean_dataframe(df, column_mappings, council)
+            df_clean = clean_dataframe(df)
 
             st.write("Processed Data")
             st.dataframe(df_clean)
