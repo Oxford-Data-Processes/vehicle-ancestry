@@ -85,10 +85,9 @@ def extract_table_from_pdf(pdf_path, has_header):
         )  # Return an empty DataFrame if no tables were extracted or matched
 
 
-def update_headers(column_mappings, df, council):
-    column_map = column_mappings[council]
+def update_headers(column_mappings, df):
     # Rename the columns using the provided column mapping
-    df.rename(columns=column_map, inplace=True)
+    df.rename(columns=column_mappings, inplace=True)
 
     return df
 
@@ -134,23 +133,50 @@ def app():
         council = st.selectbox(
             "Select Council:",
             (
+                "Argyll and Bute",
+                "BCP",
                 "East Lothian",
                 "Renfrewshire",
                 "Salford",
             ),
         )
-        council_mappings = {
-            "Salford": (1, True),
-            "Renfrewshire": (2, False),
-            "East Lothian": (3, False),
-        }
-        _, has_header = council_mappings[council]
-
-        if st.button("Process PDF"):
-            column_mappings = {
-                "Salford": {"REG": "vrm", "VEHICLE TYPE": "make"},
-                "Renfrewshire": {"column_1": "vrm", "column_2": "make"},
-                "East Lothian": {
+        council_data = {
+            "Argyll and Bute": {
+                "id": 1,
+                "has_header": False,
+                "has_gridlines": True,
+                "column_mappings": {
+                    "column_0": "vrm",
+                    "column_1": "make",
+                    "column_2": "model",
+                },
+            },
+            "BCP": {
+                "id": 2,
+                "has_header": True,
+                "has_gridlines": False,
+                "column_mappings": {
+                    "Vehicle Reg": "vrm",
+                    "Make / model": "make",
+                },
+            },
+            "Salford": {
+                "id": 3,
+                "has_header": True,
+                "has_gridlines": True,
+                "column_mappings": {"REG": "vrm", "VEHICLE TYPE": "make"},
+            },
+            "Renfrewshire": {
+                "id": 4,
+                "has_header": False,
+                "has_gridlines": True,
+                "column_mappings": {"column_1": "vrm", "column_2": "make"},
+            },
+            "East Lothian": {
+                "id": 5,
+                "has_header": False,
+                "has_gridlines": True,
+                "column_mappings": {
                     "column_0": "vrm",
                     "column_1": "vrm.1",
                     "column_3": "make",
@@ -158,9 +184,17 @@ def app():
                     "column_6": "model",
                     "column_7": "model.1",
                 },
-            }
+            },
+        }
+        has_header = council_data[council]["has_header"]
+
+        if st.button("Process PDF"):
+
             df = extract_table_from_pdf(uploaded_file, has_header=has_header)
-            df = update_headers(column_mappings, df, council)
+            st.write("Pre-processed Data")
+            st.dataframe(df)
+
+            df = update_headers(council_data[council]["column_mappings"], df)
             df_clean = clean_dataframe(df)
 
             st.write("Processed Data")
