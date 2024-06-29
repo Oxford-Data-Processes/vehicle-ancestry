@@ -1,4 +1,12 @@
 text,value
+BCP,name
+Council,vrm
+-,licence_number
+Taxi,licence_number
+Vehicle,licence_start
+Register,licence_end
+29-Feb-24,
+Licence,licence_end
 Ref,reference_number
 Name,name
 Vehicle,vrm
