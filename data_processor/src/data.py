@@ -19,7 +19,6 @@ config = {
     "BCP": {
         "gridlines": [
             {"interval": (42, 76), "label": "reference_number"},
-            {"interval": (76, 212), "label": "name"},
             {"interval": (212, 268), "label": "vrm"},
             {"interval": (268, 311), "label": "licence_number"},
             {"interval": (311, 364), "label": "licence_start"},
@@ -81,7 +80,6 @@ config = {
     "Derby": {
         "gridlines": [
             {"interval": (32, 88), "label": "plate"},
-            {"interval": (88, 320), "label": "name"},
             {"interval": (320, 416), "label": "vrm"},
             {"interval": (416, 540), "label": "make"},
         ],
@@ -141,7 +139,6 @@ config = {
         "gridlines": [
             {"interval": (52, 103), "label": "reference_number"},
             {"interval": (103, 152), "label": "licence_type"},
-            {"interval": (152, 218), "label": "name"},
             {"interval": (218, 266), "label": "vrm"},
             {"interval": (266, 320), "label": "make"},
             {"interval": (320, 386), "label": "model"},
@@ -178,7 +175,6 @@ config = {
             {"interval": (288, 336), "label": "vrm"},
             {"interval": (336, 406), "label": "make"},
             {"interval": (406, 488), "label": "model"},
-            {"interval": (488, 742), "label": "name"},
             {"interval": (742, 800), "label": "licence_end"},
         ],
         "unique_identifier": "plate",
@@ -247,6 +243,23 @@ config = {
         ],
         "unique_identifier": "reference_number",
     },
+    "South Kesteven": {
+        "gridlines": [
+            {"interval": (142, 248), "label": "vrm"},
+            {"interval": (248, 374), "label": "make"},
+            {"interval": (374, 442), "label": "licence_start"},
+            {"interval": (442, 500), "label": "licence_end"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "South Lanarkshire": {
+        "gridlines": [
+            {"interval": (50, 140), "label": "vrm"},
+            {"interval": (140, 230), "label": "make"},
+            {"interval": (230, 360), "label": "model"},
+        ],
+        "unique_identifier": "vrm",
+    },
     "Stockton": {
         "gridlines": [
             {"interval": (40, 230), "label": "licence_type"},
@@ -281,7 +294,6 @@ config = {
             {"interval": (136, 206), "label": "make"},
             {"interval": (206, 272), "label": "model"},
             {"interval": (272, 315), "label": "colour"},
-            {"interval": (315, 404), "label": "name"},
             {"interval": (450, 488), "label": "licence_start"},
             {"interval": (496, 540), "label": "licence_end"},
         ],
