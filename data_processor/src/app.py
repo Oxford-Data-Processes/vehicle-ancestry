@@ -21,7 +21,7 @@ selected_app = st.sidebar.selectbox("Choose an app", list(apps.keys()))
 def home(config):
     st.write("Welcome to the Home Page!")
     st.write("Configuration:")
-    st.json(config)
+    st.json(config, expanded=False)
 
 
 # Add other app functions here
