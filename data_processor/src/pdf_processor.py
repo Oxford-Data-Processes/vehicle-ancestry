@@ -6,6 +6,356 @@ import pdfplumber
 import numpy as np
 import re
 
+config = {
+    "Bedford": {
+        "gridlines": [
+            {"interval": (52, 121), "label": "plate"},
+            {"interval": (121, 220), "label": "vrm"},
+            {"interval": (220, 312), "label": "make"},
+            {"interval": (312, 418), "label": "model"},
+            {"interval": (418, 482), "label": "licence_start"},
+            {"interval": (482, 538), "label": "licence_end"},
+        ],
+        "unique_identifier": "plate",
+    },
+    "Pembrokeshire": {
+        "gridlines": [
+            {"interval": (76, 158), "label": "vrm"},
+            {"interval": (158, 274), "label": "make"},
+            {"interval": (274, 418), "label": "model"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Calderdale": {
+        "gridlines": [
+            {"interval": (100, 220), "label": "vrm"},
+            {"interval": (220, 340), "label": "make"},
+            {"interval": (340, 460), "label": "model"},
+            {"interval": (580, 712), "label": "licence_start"},
+            {"interval": (712, 800), "label": "licence_end"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "BCP": {
+        "gridlines": [
+            {"interval": (42, 76), "label": "reference_number"},
+            {"interval": (76, 212), "label": "name"},
+            {"interval": (212, 268), "label": "vrm"},
+            {"interval": (268, 311), "label": "licence_number"},
+            {"interval": (311, 364), "label": "licence_start"},
+            {"interval": (364, 412), "label": "licence_end"},
+            {"interval": (412, 528), "label": "make"},
+            {"interval": (528, 590), "label": "licence_type"},
+        ],
+        "unique_identifier": "reference_number",
+    },
+    "Cheshire West": {
+        "gridlines": [
+            {"interval": (52, 160), "label": "make"},
+            {"interval": (160, 478), "label": "model"},
+            {"interval": (478, 540), "label": "vrm"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "East Northamptonshire": {
+        "gridlines": [
+            {"interval": (55, 130), "label": "vrm"},
+            {"interval": (160, 240), "label": "make"},
+            {"interval": (240, 540), "label": "model"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Fylde": {
+        "gridlines": [
+            {"interval": (18, 87), "label": "vrm"},
+            {"interval": (87, 216), "label": "make"},
+            {"interval": (216, 340), "label": "model"},
+            {"interval": (340, 460), "label": "licence_start"},
+            {"interval": (460, 540), "label": "licence_end"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Great Yarmouth": {
+        "gridlines": [
+            {"interval": (52, 160), "label": "vrm"},
+            {"interval": (160, 238), "label": "make"},
+            {"interval": (238, 540), "label": "model"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Horsham": {
+        "gridlines": [
+            {"interval": (52, 103), "label": "reference_number"},
+            {"interval": (103, 152), "label": "licence_type"},
+            {"interval": (152, 218), "label": "name"},
+            {"interval": (218, 266), "label": "vrm"},
+            {"interval": (266, 320), "label": "make"},
+            {"interval": (320, 386), "label": "model"},
+            {"interval": (386, 446), "label": "licence_start"},
+            {"interval": (446, 484), "label": "licence_end"},
+            {"interval": (484, 540), "label": "plate"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Kettering": {
+        "gridlines": [
+            {"interval": (55, 102), "label": "vrm"},
+            {"interval": (148, 214), "label": "make"},
+            {"interval": (214, 540), "label": "model"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Maldon": {
+        "gridlines": [
+            {"interval": (35, 142), "label": "plate"},
+            {"interval": (142, 258), "label": "vrm"},
+            {"interval": (258, 312), "label": "make"},
+            {"interval": (312, 445), "label": "model"},
+            {"interval": (445, 576), "label": "colour"},
+            {"interval": (576, 648), "label": "seats"},
+            {"interval": (648, 736), "label": "licence_start"},
+            {"interval": (736, 800), "label": "licence_end"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Milton Keynes": {
+        "gridlines": [
+            {"interval": (256, 288), "label": "plate"},
+            {"interval": (288, 336), "label": "vrm"},
+            {"interval": (336, 406), "label": "make"},
+            {"interval": (406, 488), "label": "model"},
+            {"interval": (488, 742), "label": "name"},
+            {"interval": (742, 800), "label": "licence_end"},
+        ],
+        "unique_identifier": "plate",
+    },
+    "North Lanarkshire": {
+        "gridlines": [
+            {"interval": (52, 140), "label": "vrm"},
+            {"interval": (140, 210), "label": "make"},
+            {"interval": (210, 360), "label": "model"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Powys": {
+        "gridlines": [
+            {"interval": (3, 38), "label": "plate"},
+            {"interval": (98, 222), "label": "vrm"},
+            {"interval": (222, 312), "label": "make"},
+            {"interval": (312, 404), "label": "model"},
+            {"interval": (404, 482), "label": "licence_start"},
+        ],
+        "unique_identifier": "plate",
+    },
+    "Swansea": {
+        "gridlines": [
+            {"interval": (52, 130), "label": "vrm"},
+            {"interval": (130, 240), "label": "make"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Wealden": {
+        "gridlines": [
+            {"interval": (56, 98), "label": "plate"},
+            {"interval": (98, 136), "label": "vrm"},
+            {"interval": (136, 206), "label": "make"},
+            {"interval": (206, 272), "label": "model"},
+            {"interval": (272, 315), "label": "colour"},
+            {"interval": (315, 404), "label": "name"},
+            {"interval": (450, 488), "label": "licence_start"},
+            {"interval": (496, 540), "label": "licence_end"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "West Lothian": {
+        "gridlines": [
+            {"interval": (52, 184), "label": "licence_type"},
+            {"interval": (184, 295), "label": "vrm"},
+            {"interval": (295, 372), "label": "make"},
+            {"interval": (372, 440), "label": "model"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "West Morland Barrow": {
+        "gridlines": [
+            {"interval": (55, 118), "label": "vrm"},
+            {"interval": (118, 200), "label": "make"},
+            {"interval": (200, 300), "label": "model"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Argyll and Bute": {
+        "gridlines": [
+            {"interval": (52, 158), "label": "vrm"},
+            {"interval": (158, 245), "label": "make"},
+            {"interval": (245, 400), "label": "model"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "East Lothian": {
+        "gridlines": [
+            {"interval": (76, 168), "label": "vrm"},
+            {"interval": (168, 270), "label": "make"},
+            {"interval": (270, 418), "label": "model"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Renfrewshire": {
+        "gridlines": [
+            {"interval": (52, 138), "label": "reference_number"},
+            {"interval": (138, 248), "label": "vrm"},
+            {"interval": (248, 440), "label": "make"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Salford": {
+        "gridlines": [
+            {"interval": (28, 78), "label": "reference_number"},
+            {"interval": (78, 136), "label": "licence_type"},
+            {"interval": (136, 198), "label": "licence_start"},
+            {"interval": (198, 250), "label": "licence_end"},
+            {"interval": (286, 392), "label": "make"},
+            {"interval": (392, 450), "label": "vrm"},
+        ],
+        "unique_identifier": "reference_number",
+    },
+    "Corby": {
+        "gridlines": [
+            {"interval": (248, 312), "label": "plate"},
+            {"interval": (312, 390), "label": "licence_start"},
+            {"interval": (390, 460), "label": "vrm"},
+            {"interval": (460, 538), "label": "make"},
+            {"interval": (538, 600), "label": "model"},
+        ],
+        "unique_identifier": "plate",
+    },
+    "Cornwall": {
+        "gridlines": [
+            {"interval": (28, 121), "label": "reference_number"},
+            {"interval": (208, 318), "label": "vrm"},
+            {"interval": (318, 416), "label": "make"},
+            {"interval": (416, 570), "label": "model"},
+            {"interval": (618, 700), "label": "licence_end"},
+        ],
+        "unique_identifier": "reference_number",
+    },
+    "Derby": {
+        "gridlines": [
+            {"interval": (32, 88), "label": "plate"},
+            {"interval": (88, 320), "label": "name"},
+            {"interval": (320, 416), "label": "vrm"},
+            {"interval": (416, 540), "label": "make"},
+        ],
+        "unique_identifier": "plate",
+    },
+    "East Dunbarton": {
+        "gridlines": [
+            {"interval": (76, 150), "label": "vrm"},
+            {"interval": (150, 240), "label": "make"},
+            {"interval": (240, 400), "label": "model"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Eastleigh": {
+        "gridlines": [
+            {"interval": (56, 196), "label": "vrm"},
+            {"interval": (196, 276), "label": "make"},
+            {"interval": (276, 400), "label": "model"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Anglesey": {
+        "gridlines": [
+            {"interval": (78, 112), "label": "licence_type"},
+            {"interval": (112, 368), "label": "vrm"},
+            {"interval": (368, 514), "label": "make"},
+            {"interval": (514, 750), "label": "model"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Perth Kinross": {
+        "gridlines": [
+            {"interval": (76, 196), "label": "vrm"},
+            {"interval": (196, 286), "label": "make"},
+            {"interval": (286, 400), "label": "model"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Rother": {
+        "gridlines": [
+            {"interval": (50, 96), "label": "plate"},
+            {"interval": (96, 148), "label": "vrm"},
+            {"interval": (148, 212), "label": "make"},
+            {"interval": (212, 268), "label": "model"},
+            {"interval": (456, 499), "label": "licence_start"},
+            {"interval": (499, 560), "label": "licence_end"},
+        ],
+        "unique_identifier": "plate",
+    },
+    "Stockton": {
+        "gridlines": [
+            {"interval": (40, 230), "label": "licence_type"},
+            {"interval": (276, 386), "label": "vrm"},
+            {"interval": (386, 510), "label": "make"},
+            {"interval": (510, 578), "label": "licence_start"},
+            {"interval": (578, 644), "label": "licence_end"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Stroud": {
+        "gridlines": [
+            {"interval": (50, 128), "label": "vrm"},
+            {"interval": (128, 206), "label": "make"},
+            {"interval": (206, 340), "label": "model"},
+            {"interval": (340, 420), "label": "licence_start"},
+            {"interval": (420, 540), "label": "licence_end"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "Wellingborough": {
+        "gridlines": [
+            {"interval": (50, 128), "label": "vrm"},
+            {"interval": (128, 206), "label": "make"},
+            {"interval": (206, 340), "label": "model"},
+        ],
+        "unique_identifier": "vrm",
+    },
+    "West Lancashire": {
+        "gridlines": [
+            {"interval": (20, 50), "label": "plate"},
+            {"interval": (50, 116), "label": "vrm"},
+            {"interval": (116, 286), "label": "licence_type"},
+            {"interval": (286, 360), "label": "make"},
+            {"interval": (360, 510), "label": "model"},
+            {"interval": (703, 760), "label": "licence_start"},
+            {"interval": (760, 826), "label": "licence_end"},
+        ],
+        "unique_identifier": "plate",
+    },
+    "Wigan": {
+        "gridlines": [
+            {"interval": (76, 200), "label": "licence_type"},
+            {"interval": (200, 324), "label": "plate"},
+            {"interval": (324, 436), "label": "vrm"},
+            {"interval": (436, 538), "label": "make"},
+            {"interval": (538, 654), "label": "model"},
+            {"interval": (1110, 1200), "label": "licence_end"},
+        ],
+        "unique_identifier": "plate",
+    },
+    "Wiltshire": {
+        "gridlines": [
+            {"interval": (2, 82), "label": "plate"},
+            {"interval": (128, 188), "label": "make"},
+            {"interval": (188, 272), "label": "model"},
+            {"interval": (272, 356), "label": "vrm"},
+            {"interval": (356, 428), "label": "licence_start"},
+            {"interval": (428, 540), "label": "licence_end"},
+        ],
+        "unique_identifier": "plate",
+    },
+}
+
 
 def display_first_two_pdf_pages(pdf_bytes):
     # Load the PDF file from bytes
@@ -75,8 +425,16 @@ def find_interval(number, intervals):
 
 
 def assign_intervals_and_values(df, gridlines):
-    df["interval"] = df["x0"].apply(lambda x: find_interval(x, list(gridlines.keys())))
-    df["value"] = df["interval"].apply(lambda x: gridlines.get(x, None) if x else None)
+    # Create a list of intervals from the gridlines
+    intervals = [item["interval"] for item in gridlines]
+    df["interval"] = df["x0"].apply(lambda x: find_interval(x, intervals))
+    df["value"] = df["interval"].apply(
+        lambda x: (
+            next((item["label"] for item in gridlines if item["interval"] == x), None)
+            if x
+            else None
+        )
+    )
     return df
 
 
@@ -142,6 +500,7 @@ def transform_df(new_df, unique_identifier):
         index=unique_identifier, columns="value", values="text", aggfunc="first"
     )
     new_df.reset_index(drop=True, inplace=True)
+    new_df["vrm"] = new_df["vrm"].str.replace(" ", "")
 
     # Filter rows where "vrm" column matches the specified pattern
     new_df = new_df[
@@ -167,334 +526,6 @@ def app():
 
         display_first_two_pdf_pages(bytes_data)
 
-        config = {
-            "Bedford": {
-                "gridlines": {
-                    (52, 121): "plate",
-                    (121, 220): "vrm",
-                    (220, 312): "make",
-                    (312, 418): "model",
-                    (418, 482): "licence_start",
-                    (482, 538): "licence_end",
-                },
-                "unique_identifier": "plate",
-            },
-            "BCP": {
-                "gridlines": {
-                    (42, 76): "reference_number",
-                    (76, 212): "name",
-                    (212, 268): "vrm",
-                    (268, 311): "licence_number",
-                    (311, 364): "licence_start",
-                    (364, 412): "licence_end",
-                    (412, 528): "make",
-                    (528, 590): "licence_type",
-                },
-                "unique_identifier": "reference_number",
-            },
-            "Cheshire West": {
-                "gridlines": {
-                    (52, 160): "make",
-                    (160, 478): "model",
-                    (478, 540): "vrm",
-                },
-                "unique_identifier": "vrm",
-            },
-            "East Northamptonshire": {
-                "gridlines": {
-                    (55, 130): "vrm",
-                    (160, 240): "make",
-                    (240, 540): "model",
-                },
-                "unique_identifier": "vrm",
-            },
-            "Fylde": {
-                "gridlines": {
-                    (18, 87): "vrm",
-                    (87, 216): "make",
-                    (216, 340): "model",
-                    (340, 460): "licence_start",
-                    (460, 540): "licence_end",
-                },
-                "unique_identifier": "vrm",
-            },
-            "Great Yarmouth": {
-                "gridlines": {
-                    (52, 160): "vrm",
-                    (160, 238): "make",
-                    (238, 540): "model",
-                },
-                "unique_identifier": "vrm",
-            },
-            "Horsham": {
-                "gridlines": {
-                    (52, 103): "reference_number",
-                    (103, 152): "licence_type",
-                    (152, 218): "name",
-                    (218, 266): "vrm",
-                    (266, 320): "make",
-                    (320, 386): "model",
-                    (386, 446): "licence_start",
-                    (446, 484): "licence_end",
-                    (484, 540): "plate",
-                },
-                "unique_identifier": "vrm",
-            },
-            "Kettering": {
-                "gridlines": {
-                    (55, 102): "vrm",
-                    (148, 214): "make",
-                    (214, 540): "model",
-                },
-                "unique_identifier": "vrm",
-            },
-            "Maldon": {
-                "gridlines": {
-                    (35, 142): "plate",
-                    (142, 258): "vrm",
-                    (258, 312): "make",
-                    (312, 445): "model",
-                    (445, 576): "colour",
-                    (576, 648): "seats",
-                    (648, 736): "licence_start",
-                    (736, 800): "licence_end",
-                },
-                "unique_identifier": "vrm",
-            },
-            "Milton Keynes": {
-                "gridlines": {
-                    (256, 288): "plate",
-                    (288, 336): "vrm",
-                    (336, 406): "make",
-                    (406, 488): "model",
-                    (488, 742): "name",
-                    (742, 800): "licence_end",
-                },
-                "unique_identifier": "plate",
-            },
-            "North Lanarkshire": {
-                "gridlines": {
-                    (52, 140): "vrm",
-                    (140, 210): "make",
-                    (210, 360): "model",
-                },
-                "unique_identifier": "vrm",
-            },
-            "Powys": {
-                "gridlines": {
-                    (3, 38): "plate",
-                    (98, 222): "vrm",
-                    (222, 312): "make",
-                    (312, 404): "model",
-                    (404, 482): "licence_start",
-                },
-                "unique_identifier": "plate",
-            },
-            "Swansea": {
-                "gridlines": {(52, 130): "vrm", (130, 240): "make"},
-                "unique_identifier": "vrm",
-            },
-            "Wealden": {
-                "gridlines": {
-                    (56, 98): "plate",
-                    (98, 136): "vrm",
-                    (136, 206): "make",
-                    (206, 272): "model",
-                    (272, 315): "colour",
-                    (315, 404): "name",
-                    (450, 488): "licence_start",
-                    (496, 540): "licence_end",
-                },
-                "unique_identifier": "vrm",
-            },
-            "West Lothian": {
-                "gridlines": {
-                    (52, 184): "licence_type",
-                    (184, 295): "vrm",
-                    (295, 372): "make",
-                    (372, 440): "model",
-                },
-                "unique_identifier": "vrm",
-            },
-            "West Morland Barrow": {
-                "gridlines": {
-                    (55, 118): "vrm",
-                    (118, 200): "make",
-                    (200, 300): "model",
-                },
-                "unique_identifier": "vrm",
-            },
-            "Argyll and Bute": {
-                "gridlines": {
-                    (52, 158): "vrm",
-                    (158, 245): "make",
-                    (245, 400): "model",
-                },
-                "unique_identifier": "vrm",
-            },
-            "East Lothian": {
-                "gridlines": {
-                    (77, 170): "vrm",
-                    (220, 312): "make",
-                    (312, 418): "model",
-                },
-                "unique_identifier": "vrm",
-            },
-            "Renfrewshire": {
-                "gridlines": {
-                    (52, 138): "reference_number",
-                    (138, 248): "vrm",
-                    (248, 440): "make",
-                },
-                "unique_identifier": "vrm",
-            },
-            "Salford": {
-                "gridlines": {
-                    (28, 78): "reference_number",
-                    (78, 136): "licence_type",
-                    (136, 198): "licence_start",
-                    (198, 250): "licence_end",
-                    (286, 392): "make",
-                    (392, 450): "vrm",
-                },
-                "unique_identifier": "reference_number",
-            },
-            "Corby": {
-                "gridlines": {
-                    (248, 312): "plate",
-                    (312, 390): "licence_start",
-                    (390, 460): "vrm",
-                    (460, 538): "make",
-                    (538, 600): "model",
-                },
-                "unique_identifier": "plate",
-            },
-            "Cornwall": {
-                "gridlines": {
-                    (28, 121): "reference_number",
-                    (208, 318): "vrm",
-                    (318, 416): "make",
-                    (416, 570): "model",
-                    (618, 700): "licence_end",
-                },
-                "unique_identifier": "reference_number",
-            },
-            "Derby": {
-                "gridlines": {
-                    (32, 88): "plate",
-                    (88, 320): "name",
-                    (320, 416): "vrm",
-                    (416, 540): "make",
-                },
-                "unique_identifier": "plate",
-            },
-            "East Dunbarton": {
-                "gridlines": {
-                    (76, 150): "vrm",
-                    (150, 240): "make",
-                    (240, 400): "model",
-                },
-                "unique_identifier": "vrm",
-            },
-            "Eastleigh": {
-                "gridlines": {
-                    (56, 196): "vrm",
-                    (196, 276): "make",
-                    (276, 400): "model",
-                },
-                "unique_identifier": "vrm",
-            },
-            "Anglesey": {
-                "gridlines": {
-                    (78, 112): "licence_type",
-                    (112, 368): "vrm",
-                    (368, 514): "make",
-                    (514, 750): "model",
-                },
-                "unique_identifier": "vrm",
-            },
-            "Perth Kinross": {
-                "gridlines": {
-                    (76, 196): "vrm",
-                    (196, 286): "make",
-                    (286, 400): "model",
-                },
-                "unique_identifier": "vrm",
-            },
-            "Rother": {
-                "gridlines": {
-                    (50, 96): "plate",
-                    (96, 148): "vrm",
-                    (148, 212): "make",
-                    (212, 268): "model",
-                    (456, 499): "licence_start",
-                    (499, 560): "licence_end",
-                },
-                "unique_identifier": "plate",
-            },
-            "Stockton": {
-                "gridlines": {
-                    (40, 230): "licence_type",
-                    (276, 386): "vrm",
-                    (386, 510): "make",
-                    (510, 578): "licence_start",
-                    (578, 644): "licence_end",
-                },
-                "unique_identifier": "vrm",
-            },
-            "Stroud": {
-                "gridlines": {
-                    (50, 128): "vrm",
-                    (128, 206): "make",
-                    (206, 340): "model",
-                    (340, 420): "licence_start",
-                    (420, 540): "licence_end",
-                },
-                "unique_identifier": "vrm",
-            },
-            "Wellingborough": {
-                "gridlines": {
-                    (50, 128): "vrm",
-                    (128, 206): "make",
-                    (206, 340): "model",
-                },
-                "unique_identifier": "vrm",
-            },
-            "West Lancashire": {
-                "gridlines": {
-                    (20, 50): "plate",
-                    (50, 116): "vrm",
-                    (116, 286): "licence_type",
-                    (286, 360): "make",
-                    (360, 510): "model",
-                    (703, 760): "licence_start",
-                    (760, 826): "licence_end",
-                },
-                "unique_identifier": "plate",
-            },
-            "Wigan": {
-                "gridlines": {
-                    (76, 200): "licence_type",
-                    (200, 324): "plate",
-                    (324, 436): "vrm",
-                    (436, 538): "make",
-                    (538, 654): "model",
-                    (1110, 1200): "licence_end",
-                },
-                "unique_identifier": "plate",
-            },
-            "Wiltshire": {
-                "gridlines": {
-                    (2, 82): "plate",
-                    (128, 188): "make",
-                    (188, 272): "model",
-                    (272, 356): "vrm",
-                    (356, 428): "licence_start",
-                    (428, 540): "licence_end",
-                },
-                "unique_identifier": "plate",
-            },
-        }
         council = st.selectbox("Select Council:", tuple(sorted(config.keys())))
 
         gridlines = config[council]["gridlines"]

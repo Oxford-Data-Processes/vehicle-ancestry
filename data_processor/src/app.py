@@ -1,6 +1,7 @@
 import streamlit as st
 from pdf_processor import (
     app as pdf_processor,
+    config,
 )  # Assuming you have a function called `process_pdf` in your pdf_processor module
 
 # Set the page to wide mode
@@ -17,16 +18,17 @@ apps = {
 selected_app = st.sidebar.selectbox("Choose an app", list(apps.keys()))
 
 
-# Define the Home page
-def home():
+def home(config):
     st.write("Welcome to the Home Page!")
+    st.write("Configuration:")
+    st.json(config)
 
 
 # Add other app functions here
 
 # Navigation
 if selected_app == "Home":
-    home()
+    home(config)
 elif selected_app == "PDF Processor":
     pdf_processor()
 # Add other navigation options here
