@@ -15,15 +15,23 @@ apps = {
     "Excel Config": "excel_config",
 }
 
-# Add a selectbox to the sidebar for navigation
-selected_app = st.sidebar.selectbox("Choose an app", list(apps.keys()))
+# Add a simple login page
+username = st.text_input("Username")
+password = st.text_input("Password", type="password")
 
-if selected_app == "PDF Config":
-    pdf_config()
-elif selected_app == "Excel Config":
-    excel_config()
-elif selected_app == "PDF Processor":
-    pdf_processor()
-elif selected_app == "Excel Processor":
-    excel_processor()
+if st.button("Login"):
+    if username == "admin" and password == "vehicleancestry":
+        # Add a selectbox to the sidebar for navigation
+        selected_app = st.sidebar.selectbox("Choose an app", list(apps.keys()))
+
+        if selected_app == "PDF Config":
+            pdf_config()
+        elif selected_app == "Excel Config":
+            excel_config()
+        elif selected_app == "PDF Processor":
+            pdf_processor()
+        elif selected_app == "Excel Processor":
+            excel_processor()
+    else:
+        st.error("Incorrect username or password")
 # Add other navigation options here
