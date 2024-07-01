@@ -15,30 +15,14 @@ apps = {
     "Excel Config": "excel_config",
 }
 
-# Add a simple login page
-username = st.text_input("Username")
-password = st.text_input("Password", type="password")
+# Add a selectbox to the sidebar for navigation
+selected_app = st.sidebar.selectbox("Choose an app", list(apps.keys()))
 
-# Check if the login was successful
-if st.experimental_get_query_params().get("login") == ["success"]:
-    # Add a selectbox to the sidebar for navigation
-    selected_app = st.sidebar.selectbox("Choose an app", list(apps.keys()))
-
-    if selected_app == "PDF Config":
-        pdf_config()
-    elif selected_app == "Excel Config":
-        excel_config()
-    elif selected_app == "PDF Processor":
-        pdf_processor()
-    elif selected_app == "Excel Processor":
-        excel_processor()
-else:
-    if st.button("Login"):
-        if username == "admin" and password == "vehicleancestry":
-            # Save the login status to cookies
-            st.experimental_set_query_params({"login": "success"})
-            st.experimental_rerun()
-        else:
-            st.error("Incorrect username or password")
-    else:
-        st.error("Please login to access the application.")
+if selected_app == "PDF Config":
+    pdf_config()
+elif selected_app == "Excel Config":
+    excel_config()
+elif selected_app == "PDF Processor":
+    pdf_processor()
+elif selected_app == "Excel Processor":
+    excel_processor()
