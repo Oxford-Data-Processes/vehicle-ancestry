@@ -7,7 +7,7 @@ def app():
     with open("data_processor/data/excel_config.json", "r") as file:
         excel_config = json.load(file)
     # Title of the application
-    st.title("Excel File Uploader")
+    st.title("Excel Processor")
 
     # File uploader allows user to add their own Excel file
     uploaded_file = st.file_uploader("Choose an Excel file", type="xlsx")

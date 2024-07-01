@@ -160,7 +160,7 @@ def app():
         pdf_config = json.load(file)
 
     # Title of the application
-    st.title("PDF Uploader")
+    st.title("PDF Processor")
 
     # File uploader allows user to add their own PDF
     uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")

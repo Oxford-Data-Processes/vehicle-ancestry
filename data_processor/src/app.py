@@ -9,11 +9,10 @@ st.set_page_config(layout="wide")
 
 # Define the navigation structure
 apps = {
-    "PDF Config": "pdf_config",
-    "Excel Config": "excel_config",
     "PDF Processor": "pdf_processor",
     "Excel Processor": "excel_processor",
-    # Add other apps here
+    "PDF Config": "pdf_config",
+    "Excel Config": "excel_config",
 }
 
 # Add a selectbox to the sidebar for navigation

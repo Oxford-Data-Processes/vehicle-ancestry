@@ -49,6 +49,7 @@ def edit_config():
 
 
 def app():
+    st.title("Excel Config")
     download_config(
         "data_processor/data/excel_config.json",
         "Download Excel Config",

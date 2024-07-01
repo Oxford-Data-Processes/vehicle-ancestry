@@ -49,6 +49,7 @@ def edit_config():
 
 
 def app():
+    st.title("PDF Config")
     download_config(
         "data_processor/data/pdf_config.json",
         "Download PDF Config",
