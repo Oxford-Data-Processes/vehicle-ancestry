@@ -3,9 +3,7 @@ import pandas as pd
 import fitz  # PyMuPDF
 import io
 import pdfplumber
-import numpy as np
-import re
-from data import pdf_config
+import json
 
 
 def display_first_two_pdf_pages(pdf_bytes):
@@ -38,10 +36,6 @@ def display_first_two_pdf_pages(pdf_bytes):
 
     # Close the PDF file
     pdf.close()
-
-
-import pdfplumber
-import pandas as pd
 
 
 def extract_pdf_text(pdf_path):
@@ -162,6 +156,9 @@ def transform_df(new_df, unique_identifier):
 
 def app():
 
+    with open("data_processor/data/pdf_config.json", "r") as file:
+        pdf_config = json.load(file)
+
     # Title of the application
     st.title("PDF Uploader")
 
@@ -203,7 +200,7 @@ def app():
             st.download_button(
                 label="Download Processed Data",
                 data=new_df.to_csv(index=False),
-                file_name=f"{council}_{pd.Timestamp('now').strftime('%d-%m-%YT%H:%M:%S')}.csv",
+                file_name=f"{council}_{pd.Timestamp('now').strftime('%d_%m_%YT%H_%M_%S')}.csv",
                 mime="text/csv",
             )
 

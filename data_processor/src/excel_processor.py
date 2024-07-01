@@ -1,9 +1,11 @@
 import streamlit as st
 import pandas as pd
-from data import excel_config
+import json
 
 
 def app():
+    with open("data_processor/data/excel_config.json", "r") as file:
+        excel_config = json.load(file)
     # Title of the application
     st.title("Excel File Uploader")
 
@@ -39,7 +41,7 @@ def app():
         st.download_button(
             label="Download Processed Data",
             data=df.to_csv(index=False),
-            file_name=f"{council}_{pd.Timestamp('now').strftime('%d-%m-%YT%H:%M:%S')}.csv",
+            file_name=f"{council}_{pd.Timestamp('now').strftime('%d_%m_%YT%H_%M_%S')}.csv",
             mime="text/csv",
         )
 
