@@ -4,7 +4,6 @@ from excel_processor import app as excel_processor
 from pdf_config import app as pdf_config
 from excel_config import app as excel_config
 
-st.set_page_config(layout="wide", theme="light")
 
 # Dummy user credentials
 USER_CREDENTIALS = {
@@ -26,8 +25,7 @@ def login():
 
 
 def main_app():
-    # Set the page to wide mode and light mode
-    st.set_page_config(layout="wide", theme="light")
+    st.set_page_config(layout="wide")
 
     # Define the navigation structure
     apps = {
