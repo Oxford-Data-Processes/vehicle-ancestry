@@ -10,7 +10,7 @@ def app():
     # File uploader allows user to add their own Excel file
     uploaded_file = st.file_uploader("Choose an Excel file", type="xlsx")
 
-    council = st.selectbox("Select a council", excel_config.keys())
+    council = st.selectbox("Select Council", excel_config.keys())
 
     process_data = st.button("Process Data")
 
@@ -31,6 +31,7 @@ def app():
 
         st.write(excel_config[council]["column_mappings"])
         df["vrm"] = df["vrm"].str.replace(" ", "")
+        df = df.copy()[excel_config[council]["column_mappings"].values()]
 
         st.write("Processed Excel file:")
         st.dataframe(df)

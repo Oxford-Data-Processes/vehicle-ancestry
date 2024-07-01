@@ -181,13 +181,15 @@ def app():
 
         gridlines = pdf_config[council]["gridlines"]
         unique_identifier = pdf_config[council]["unique_identifier"]
-        pdf_path = f"pdfs/tabular/{council}.pdf"
+        pdf_path = f"pdf_files/tabular/{council}.pdf"
 
         if st.button("Process PDF"):
 
             df = extract_pdf_text(pdf_path)
             st.write("Pre-processed Data")
             st.dataframe(df)
+
+            st.write(pdf_config[council])
 
             df = assign_intervals_and_values(df, gridlines)
             df = process_consecutive_values(df, target_value=unique_identifier)

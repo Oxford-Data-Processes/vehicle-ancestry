@@ -461,8 +461,8 @@ excel_config = {
     "Caerphilly": {
         "has_headers": False,
         "column_mappings": {
-            1: "vrm",
-            2: "make",
+            0: "vrm",
+            1: "make",
         },
     },
     "Cambridge": {
