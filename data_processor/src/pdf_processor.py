@@ -5,7 +5,7 @@ import io
 import pdfplumber
 import numpy as np
 import re
-from data import config
+from data import pdf_config
 
 
 def display_first_two_pdf_pages(pdf_bytes):
@@ -177,10 +177,10 @@ def app():
 
         display_first_two_pdf_pages(bytes_data)
 
-        council = st.selectbox("Select Council:", tuple(sorted(config.keys())))
+        council = st.selectbox("Select Council:", tuple(sorted(pdf_config.keys())))
 
-        gridlines = config[council]["gridlines"]
-        unique_identifier = config[council]["unique_identifier"]
+        gridlines = pdf_config[council]["gridlines"]
+        unique_identifier = pdf_config[council]["unique_identifier"]
         pdf_path = f"pdfs/tabular/{council}.pdf"
 
         if st.button("Process PDF"):
@@ -198,10 +198,12 @@ def app():
             st.write("Processed Data")
             st.dataframe(new_df)
 
-            if st.button("Confirm Upload"):
-                st.success("Uploaded successfully!")
-                # Reset the processed state so the message doesn't keep showing up
-                st.session_state["processed"] = False
+            st.download_button(
+                label="Download Processed Data",
+                data=new_df.to_csv(index=False),
+                file_name=f"{council}_{pd.Timestamp('now').strftime('%d-%m-%YT%H:%M:%S')}.csv",
+                mime="text/csv",
+            )
 
     else:
         st.write("Please upload a PDF file to process the data.")

@@ -1,4 +1,4 @@
-config = {
+pdf_config = {
     "Anglesey": {
         "gridlines": [
             {"interval": (78, 112), "label": "licence_type"},
@@ -357,5 +357,171 @@ config = {
             {"interval": (428, 540), "label": "licence_end"},
         ],
         "unique_identifier": "plate",
+    },
+}
+
+
+excel_config = {
+    "Aberdeen City": {
+        "has_headers": True,
+        "column_mappings": {
+            "Registration": "vrm",
+            "Make": "make",
+            "Model": "model",
+            "date rec": "recorded_date",
+        },
+    },
+    "Aberdeenshire": {
+        "has_headers": True,
+        "column_mappings": {
+            "Reg": "vrm",
+            "Make": "make",
+            "Model": "model",
+            "Date from": "licence_start",
+            "Date to": "licence_end",
+        },
+    },
+    "Adur and Worthing": {
+        "has_headers": True,
+        "column_mappings": {
+            "record_type": "licence_type",
+            "vrm": "vrm",
+            "make": "make",
+            "model": "model",
+            "date_from": "licence_start",
+            "date_to": "licence_end",
+        },
+    },
+    "Amber Valley": {
+        "has_headers": True,
+        "column_mappings": {
+            "Reg": "vrm",
+            "Date from": "licence_start",
+        },
+    },
+    "Angus": {
+        "has_headers": True,
+        "column_mappings": {
+            "Registration No": "vrm",
+            "Make": "make",
+            "Model": "model",
+            "date rec": "recorded_date",
+        },
+    },
+    "Basildon": {
+        "has_headers": True,
+        "column_mappings": {
+            "Reg": "vrm",
+            "From": "licence_start",
+            "To": "licence_end",
+            "Make": "make",
+            "Model": "model",
+        },
+    },
+    "Bedford": {
+        "has_headers": True,
+        "column_mappings": {
+            "reg": "vrm",
+            "make": "make",
+            "model": "model",
+            "from": "licence_start",
+            "to": "licence_end",
+        },
+    },
+    "Bridgend": {
+        "has_headers": True,
+        "column_mappings": {
+            "Reg": "vrm",
+            "Make": "make",
+            "Model": "model",
+            "Date To": "licence_end",
+        },
+    },
+    "Bristol City": {
+        "has_headers": True,
+        "column_mappings": {
+            "Reg": "vrm",
+            "Make": "make",
+            "Model": "model",
+            "Date from": "licence_start",
+            "Date to": "licence_end",
+        },
+    },
+    "Bromsgrove": {
+        "has_headers": True,
+        "column_mappings": {
+            "record_type": "licence_type",
+            "vrm": "vrm",
+            "make": "make",
+            "model": "model",
+            "date_from": "licence_start",
+            "date_to": "licence_end",
+        },
+    },
+    "Caerphilly": {
+        "has_headers": False,
+        "column_mappings": {
+            1: "vrm",
+            2: "make",
+        },
+    },
+    "Cambridge": {
+        "has_headers": True,
+        "column_mappings": {
+            "Reg": "vrm",
+            "Make": "make",
+            "Model Y": "model",
+            "Date from": "licence_start",
+            "Date to": "licence_end",
+        },
+    },
+    "Cardiff": {
+        "has_headers": True,
+        "column_mappings": {
+            "Reg": "vrm",
+            "Make": "make",
+            "Model": "model",
+            "From": "licence_start",
+            "To": "licence_end",
+        },
+    },
+    "Carmathenshire": {
+        "has_headers": True,
+        "column_mappings": {
+            "Reg": "vrm",
+            "Make": "make",
+            "Model": "model",
+            "Date from": "licence_start",
+            "Date to": "licence_end",
+        },
+    },
+    "Chelmsford": {
+        "has_headers": True,
+        "column_mappings": {
+            "Reg": "vrm",
+            "Make": "make",
+            "Model": "model",
+            "Date from": "licence_start",
+            "Date to": "licence_end",
+        },
+    },
+    "Cheshire West": {
+        "has_headers": True,
+        "column_mappings": {
+            "Registration": "vrm",
+            "Make": "make",
+            "model": "model",
+            "date rec": "recorded_date",
+        },
+    },
+    "Colchester": {
+        "has_headers": True,
+        "column_mappings": {
+            "reg": "vrm",
+            "make": "make",
+            "model": "model",
+            "from": "licence_start",
+            "to": "licence_end",
+        },
     },
 }
