@@ -7,7 +7,7 @@ from excel_config import app as excel_config
 
 # Dummy user credentials
 USER_CREDENTIALS = {
-    "admin": "vehicle_ancestry",
+    "admin": "vehicleancestry",
 }
 
 
