@@ -2,20 +2,17 @@
   "Aberdeen City": {
     "has_headers": true,
     "column_mappings": {
-      "Registration": "vrm",
-      "Make": "make",
-      "Model": "model",
-      "date rec": "recorded_date"
+      "Vehicle_Registration": "vrm",
+      "Vehicle_Make": "make",
+      "Vehicle_Model": "model"
     }
   },
   "Aberdeenshire": {
     "has_headers": true,
     "column_mappings": {
-      "Reg": "vrm",
-      "Make": "make",
-      "Model": "model",
-      "Date from": "licence_start",
-      "Date to": "licence_end"
+      "Reg No": "vrm",
+      "Vehicle Make": "make",
+      "Vehicle Model": "model"
     }
   },
   "Adur and Worthing": {
@@ -58,11 +55,11 @@
   "Bedford": {
     "has_headers": true,
     "column_mappings": {
-      "reg": "vrm",
-      "make": "make",
-      "model": "model",
-      "from": "licence_start",
-      "to": "licence_end"
+      "VEHICLE REGISTRATION": "vrm",
+      "MAKE": "make",
+      "MODEL": "model",
+      "LICENCE START": "licence_start",
+      "LICENCE EXPIRY": "licence_end"
     }
   },
   "Bridgend": {
