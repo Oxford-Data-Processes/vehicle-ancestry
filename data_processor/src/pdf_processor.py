@@ -93,7 +93,7 @@ def process_consecutive_values(df, target_value):
                 current_row = row.copy()
             else:
                 # Concatenate the text field
-                current_row["text"] += row["text"]
+                current_row["text"] += " " + row["text"]
                 # Update the bounding box
                 current_row["x1"] = max(current_row["x1"], row["x1"])
                 current_row["y1"] = max(current_row["y1"], row["y1"])
@@ -201,7 +201,7 @@ def app():
         council = st.selectbox("Select Council:", tuple(sorted(pdf_config.keys())))
 
         gridlines = pdf_config[council]["gridlines"]
-        unique_identifier = pdf_config[council]["unique_identifier"]
+        unique_identifier = [item["label"] for item in gridlines][0]
         date_format = pdf_config[council]["date_format"]
         pdf_path = f"pdf_files/tabular/{council}.pdf"
 

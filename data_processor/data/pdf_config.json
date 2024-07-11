@@ -5,7 +5,6 @@
       { "interval": [368, 514], "label": "make" },
       { "interval": [514, 750], "label": "model" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "Argyll and Bute": {
@@ -14,7 +13,6 @@
       { "interval": [158, 245], "label": "make" },
       { "interval": [245, 400], "label": "model" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "BCP": {
@@ -25,7 +23,6 @@
       { "interval": [364, 412], "label": "date_to" },
       { "interval": [412, 528], "label": "make" }
     ],
-    "unique_identifier": "reference_number",
     "date_format": "%d-%b-%y"
   },
   "Bedford": {
@@ -37,7 +34,6 @@
       { "interval": [418, 482], "label": "date_from" },
       { "interval": [482, 538], "label": "date_to" }
     ],
-    "unique_identifier": "plate",
     "date_format": "%d/%m/%Y"
   },
   "Calderdale": {
@@ -48,7 +44,6 @@
       { "interval": [580, 712], "label": "date_from" },
       { "interval": [712, 800], "label": "date_to" }
     ],
-    "unique_identifier": "reg",
     "date_format": "%d %b %Y"
   },
   "Cheshire West": {
@@ -57,7 +52,6 @@
       { "interval": [160, 478], "label": "model" },
       { "interval": [478, 540], "label": "reg" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "Corby": {
@@ -67,7 +61,6 @@
       { "interval": [460, 538], "label": "make" },
       { "interval": [538, 600], "label": "model" }
     ],
-    "unique_identifier": "reg",
     "date_format": "%d.%m.%Y"
   },
   "Cornwall": {
@@ -78,7 +71,6 @@
       { "interval": [416, 570], "label": "model" },
       { "interval": [618, 700], "label": "date_to" }
     ],
-    "unique_identifier": "reference_number",
     "date_format": "%d/%m/%Y"
   },
   "Derby": {
@@ -87,7 +79,6 @@
       { "interval": [320, 416], "label": "reg" },
       { "interval": [416, 540], "label": "make" }
     ],
-    "unique_identifier": "plate",
     "date_format": null
   },
   "East Dunbarton": {
@@ -96,7 +87,6 @@
       { "interval": [150, 240], "label": "make" },
       { "interval": [240, 400], "label": "model" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "East Northamptonshire": {
@@ -105,7 +95,6 @@
       { "interval": [160, 240], "label": "make" },
       { "interval": [240, 540], "label": "model" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "Eastleigh": {
@@ -114,7 +103,6 @@
       { "interval": [196, 276], "label": "make" },
       { "interval": [276, 400], "label": "model" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "Fylde": {
@@ -125,7 +113,6 @@
       { "interval": [340, 460], "label": "date_from" },
       { "interval": [460, 540], "label": "date_to" }
     ],
-    "unique_identifier": "reg",
     "date_format": "%d/%m/%Y"
   },
   "Great Yarmouth": {
@@ -134,7 +121,6 @@
       { "interval": [160, 238], "label": "make" },
       { "interval": [238, 540], "label": "model" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "Horsham": {
@@ -145,7 +131,6 @@
       { "interval": [386, 446], "label": "date_from" },
       { "interval": [446, 484], "label": "date_to" }
     ],
-    "unique_identifier": "reg",
     "date_format": "%d/%m/%Y"
   },
   "Kettering": {
@@ -154,7 +139,6 @@
       { "interval": [148, 214], "label": "make" },
       { "interval": [214, 540], "label": "model" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "Maldon": {
@@ -165,7 +149,6 @@
       { "interval": [648, 736], "label": "date_from" },
       { "interval": [736, 800], "label": "date_to" }
     ],
-    "unique_identifier": "reg",
     "date_format": "%d/%m/%Y"
   },
   "Maidstone": {
@@ -174,7 +157,6 @@
       { "interval": [140, 280], "label": "make" },
       { "interval": [280, 440], "label": "model" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "Milton Keynes": {
@@ -185,7 +167,6 @@
       { "interval": [406, 488], "label": "model" },
       { "interval": [742, 800], "label": "date_to" }
     ],
-    "unique_identifier": "plate",
     "date_format": "%d-%b-%y"
   },
   "North Lanarkshire": {
@@ -194,7 +175,6 @@
       { "interval": [140, 210], "label": "make" },
       { "interval": [210, 360], "label": "model" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "Pembrokeshire": {
@@ -203,7 +183,6 @@
       { "interval": [158, 274], "label": "make" },
       { "interval": [274, 418], "label": "model" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "Perth Kinross": {
@@ -212,7 +191,6 @@
       { "interval": [196, 286], "label": "make" },
       { "interval": [286, 400], "label": "model" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "Powys": {
@@ -223,7 +201,6 @@
       { "interval": [312, 404], "label": "model" },
       { "interval": [404, 482], "label": "date_from" }
     ],
-    "unique_identifier": "plate",
     "date_format": "%d/%m/%Y"
   },
   "Renfrewshire": {
@@ -231,7 +208,6 @@
       { "interval": [138, 248], "label": "reg" },
       { "interval": [248, 440], "label": "make" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "Rother": {
@@ -243,7 +219,6 @@
       { "interval": [454, 499], "label": "date_from" },
       { "interval": [499, 560], "label": "date_to" }
     ],
-    "unique_identifier": "plate",
     "date_format": "%d/%m/%Y"
   },
   "Salford": {
@@ -254,7 +229,6 @@
       { "interval": [286, 392], "label": "make" },
       { "interval": [392, 450], "label": "reg" }
     ],
-    "unique_identifier": "reference_number",
     "date_format": "%d/%m/%Y"
   },
   "South Kesteven": {
@@ -264,7 +238,6 @@
       { "interval": [374, 442], "label": "date_from" },
       { "interval": [442, 500], "label": "date_to" }
     ],
-    "unique_identifier": "reg",
     "date_format": "%d/%m/%Y"
   },
   "South Lanarkshire": {
@@ -273,7 +246,6 @@
       { "interval": [140, 230], "label": "make" },
       { "interval": [230, 360], "label": "model" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "Stockton": {
@@ -283,7 +255,6 @@
       { "interval": [510, 578], "label": "date_from" },
       { "interval": [578, 644], "label": "date_to" }
     ],
-    "unique_identifier": "reg",
     "date_format": "%d/%m/%Y"
   },
   "Stroud": {
@@ -294,7 +265,6 @@
       { "interval": [340, 420], "label": "date_from" },
       { "interval": [420, 540], "label": "date_to" }
     ],
-    "unique_identifier": "reg",
     "date_format": "%d-%b-%y"
   },
   "Swansea": {
@@ -302,7 +272,6 @@
       { "interval": [52, 130], "label": "reg" },
       { "interval": [130, 240], "label": "make" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "Wealden": {
@@ -313,7 +282,6 @@
       { "interval": [450, 488], "label": "date_from" },
       { "interval": [496, 540], "label": "date_to" }
     ],
-    "unique_identifier": "reg",
     "date_format": "%d/%m/%Y"
   },
   "Wellingborough": {
@@ -322,7 +290,6 @@
       { "interval": [128, 206], "label": "make" },
       { "interval": [206, 340], "label": "model" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "West Lancashire": {
@@ -334,7 +301,6 @@
       { "interval": [703, 760], "label": "date_from" },
       { "interval": [760, 826], "label": "date_to" }
     ],
-    "unique_identifier": "plate",
     "date_format": "%d/%m/%Y"
   },
   "West Lothian": {
@@ -343,7 +309,6 @@
       { "interval": [295, 372], "label": "make" },
       { "interval": [372, 440], "label": "model" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "West Morland Barrow": {
@@ -352,7 +317,6 @@
       { "interval": [118, 200], "label": "make" },
       { "interval": [200, 300], "label": "model" }
     ],
-    "unique_identifier": "reg",
     "date_format": null
   },
   "Wigan": {
@@ -363,7 +327,6 @@
       { "interval": [538, 654], "label": "model" },
       { "interval": [1110, 1200], "label": "date_to" }
     ],
-    "unique_identifier": "plate",
     "date_format": "%d/%m/%Y"
   },
   "Wiltshire": {
@@ -375,7 +338,6 @@
       { "interval": [356, 428], "label": "date_from" },
       { "interval": [428, 540], "label": "date_to" }
     ],
-    "unique_identifier": "plate",
     "date_format": "%d/%m/%Y"
   }
 }
