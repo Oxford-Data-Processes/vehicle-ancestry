@@ -1,60 +1,50 @@
 import streamlit as st
-import json
 import pandas as pd
+import datetime
 
 
 def download_config(file_path, label, file_name, mime):
+    with open(file_path, "r") as file:
+        data = file.read()
     st.download_button(
         label=label,
-        data=open(file_path, "r").read(),
+        data=data,
         file_name=file_name,
         mime=mime,
     )
 
 
 def edit_config():
-    with open("data_processor/data/excel_config.json", "r") as file:
-        excel_config = json.load(file)
+    st.write("Current Excel Column Mappings")
+    df_mappings = pd.read_csv("data_processor/data/excel_mappings.csv")
+    df_mappings.sort_values(by=["mapped_value", "raw_value"], inplace=True)
+    st.dataframe(df_mappings)
 
-    council = st.selectbox("Select Council:", list(excel_config.keys()))
+    st.write("Add New Mapping")
+    raw_value = st.text_input("Enter raw value:")
+    mapped_value = st.text_input("Enter mapped value:")
 
-    if council:
-        st.write("Current Config for", council)
-        st.json(excel_config[council])
-
-        column_mappings = st.text_area(
-            "Enter new column_mappings in JSON format:",
-            value=json.dumps(excel_config[council]["column_mappings"]),
+    if st.button("Add Mapping"):
+        new_mapping = pd.DataFrame(
+            [[raw_value, mapped_value]], columns=["raw_value", "mapped_value"]
         )
-        has_headers = st.text_input(
-            "Enter new boolean has_headers value (true/false):",
-            value=excel_config[council]["has_headers"],
-        )
+        df_mappings = pd.concat([df_mappings, new_mapping], ignore_index=True)
+        df_mappings.sort_values(by=["mapped_value", "raw_value"], inplace=True)
+        st.dataframe(df_mappings)
 
-        if st.button("Save Changes"):
-            try:
-                column_mappings = json.loads(column_mappings)
-                excel_config[council]["column_mappings"] = column_mappings
-                excel_config[council]["has_headers"] = has_headers
-
-                with open(
-                    f"data_processor/data/excel_config_{pd.Timestamp('now').strftime('%d_%m_%YT%_%M_%S')}.json",
-                    "w",
-                ) as file:
-                    json.dump(excel_config, file)
-
-                st.success("Changes saved successfully.")
-            except json.JSONDecodeError:
-                st.error("Invalid JSON format for gridlines.")
+        timestamp = datetime.datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
+        file_path = f"data_processor/data/excel_mappings_{timestamp}.csv"
+        df_mappings.to_csv(file_path, index=False)
+        st.success(f"New mapping added and saved to {file_path}")
 
 
 def app():
     st.title("Excel Config")
     download_config(
-        "data_processor/data/excel_config.json",
-        "Download Excel Config",
-        "excel_config.json",
-        "application/json",
+        "data_processor/data/excel_mappings.csv",
+        "Download Excel Column Mappings",
+        "excel_mappings.csv",
+        "csv",
     )
     edit_config()
 
