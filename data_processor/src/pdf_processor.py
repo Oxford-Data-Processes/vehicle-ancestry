@@ -109,48 +109,72 @@ def process_consecutive_values(df, target_value):
     return pd.DataFrame(processed_rows)
 
 
-def concatenate_values(df):
-    new_value_column = []
-    new_text_column = []
+def split_dataframe(df_reduced, unique_identifier):
+    # Initialize an empty list to store the dataframes
+    dataframes_list = []
 
-    # Iterate over the dataframe to concatenate values
-    current_value = None
-    current_text = ""
+    # Find the indices where "reference_number" appears in the value column
+    reference_indices = df_reduced[df_reduced["value"] == unique_identifier].index
 
-    for value, text in zip(df["value"], df["text"]):
-        if value == current_value:
-            current_text += text + " "
-        else:
-            if current_value is not None:
-                new_value_column.append(current_value)
-                new_text_column.append(current_text.strip())
-            current_value = value
-            current_text = text + " "  # Added space at the end of each text
+    # Iterate through the indices and create dataframes
+    for i in range(len(reference_indices)):
+        start_idx = reference_indices[i]
+        end_idx = (
+            reference_indices[i + 1]
+            if i + 1 < len(reference_indices)
+            else len(df_reduced)
+        )
+        chunk_df = df_reduced[start_idx:end_idx].reset_index(drop=True)
+        dataframes_list.append(chunk_df)
 
-    # Append the last accumulated values
-    if current_value is not None:
-        new_value_column.append(current_value)
-        new_text_column.append(current_text.strip())
+    return dataframes_list
 
-    # Create a new DataFrame with the concatenated values
-    new_df = pd.DataFrame({"value": new_value_column, "text": new_text_column})
+
+def process_dataframes(dataframes_list, unique_identifier):
+    new_dataframes_list = []
+
+    for df in dataframes_list:
+        df = df.groupby("value", as_index=False).agg({"text": " ".join})
+        df[unique_identifier] = df[df["value"] == unique_identifier]["text"].iloc[0]
+        df = df.pivot_table(
+            index=unique_identifier, columns="value", values="text", aggfunc="first"
+        )
+        df.reset_index(inplace=True, drop=True)
+        new_dataframes_list.append(df)
+
+    new_df = pd.concat(new_dataframes_list)
     return new_df
 
 
-def transform_df(new_df, unique_identifier):
-    new_df[unique_identifier] = new_df.apply(
-        lambda x: x.text if x.value == unique_identifier else None, axis=1
-    ).ffill()
-    new_df = new_df.pivot_table(
-        index=unique_identifier, columns="value", values="text", aggfunc="first"
-    )
-    new_df.reset_index(drop=True, inplace=True)
-    new_df["vrm"] = new_df["vrm"].str.replace(" ", "")
+def transform_df(new_df, unique_identifier, date_format):
+    new_df["reg"] = new_df["reg"].str.replace(" ", "")
 
-    # Filter rows where "vrm" column matches the specified pattern
+    # Filter rows where "reg" column matches the specified pattern
     new_df = new_df[
-        new_df["vrm"].str.contains(r"^(?:[A-Z]+[0-9]|[0-9]+[A-Z])[A-Z0-9]*$", na=False)
+        new_df["reg"].str.contains(r"^(?:[A-Z]+[0-9]|[0-9]+[A-Z])[A-Z0-9]*$", na=False)
     ]
+    if date_format is not None:
+        if "date_from" in new_df.columns:
+            new_df["date_from"] = pd.to_datetime(
+                new_df["date_from"], format=date_format, errors="coerce"
+            ).dt.strftime("%d/%m/%Y")
+        if "date_to" in new_df.columns:
+            new_df["date_to"] = pd.to_datetime(
+                new_df["date_to"], format=date_format, errors="coerce"
+            ).dt.strftime("%d/%m/%Y")
+
+    # Remove rows where date format does not match
+    if "date_from" in new_df.columns:
+        new_df = new_df[new_df["date_from"].notna()]
+    if "date_to" in new_df.columns:
+        new_df = new_df[new_df["date_to"].notna()]
+
+    # Select the required columns
+    columns_to_select = ["reg", "make", "model", "date_from", "date_to"]
+    existing_columns = [col for col in columns_to_select if col in new_df.columns]
+    new_df = new_df[existing_columns]
+    new_df = new_df.sort_values(by="reg", ascending=True)
+
     return new_df
 
 
@@ -178,6 +202,7 @@ def app():
 
         gridlines = pdf_config[council]["gridlines"]
         unique_identifier = pdf_config[council]["unique_identifier"]
+        date_format = pdf_config[council]["date_format"]
         pdf_path = f"pdf_files/tabular/{council}.pdf"
 
         if st.button("Process PDF"):
@@ -191,8 +216,9 @@ def app():
             df = assign_intervals_and_values(df, gridlines)
             df = process_consecutive_values(df, target_value=unique_identifier)
             df_reduced = df[["text", "value"]].reset_index(drop=True)
-            new_df = concatenate_values(df_reduced)
-            new_df = transform_df(new_df, unique_identifier)
+            dataframes_list = split_dataframe(df_reduced, unique_identifier)
+            new_df = process_dataframes(dataframes_list, unique_identifier)
+            new_df = transform_df(new_df, unique_identifier, date_format)
 
             st.write("Processed Data")
             st.dataframe(new_df)
