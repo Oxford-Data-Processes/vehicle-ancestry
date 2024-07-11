@@ -6,32 +6,24 @@ import json
 def app():
     df_mappings = pd.read_csv("data_processor/data/excel_mappings.csv")
 
-    with open("data_processor/data/excel_config.json", "r") as f:
-        excel_config = json.load(f)
-
     # Title of the application
     st.title("Excel Processor")
 
     # File uploader allows user to add their own Excel file
     uploaded_file = st.file_uploader("Choose an Excel file", type="xlsx")
 
-    council = st.selectbox("Select Council:", excel_config.keys())
     process_data = st.button("Process Data")
 
     if process_data:
         # To read file as bytes:
         bytes_data = uploaded_file.getvalue()
 
-        date_format = excel_config[council]["date_format"]
-
         df = pd.read_excel(
             bytes_data,
             sheet_name=0,
             parse_dates=True,
             date_parser=lambda x: (
-                pd.to_datetime(x, format=date_format, errors="coerce")
-                if date_format
-                else None
+                pd.to_datetime(x, format="%d/%m/%Y", errors="coerce")
             ),
         )
         df.columns = [
@@ -63,7 +55,7 @@ def app():
         st.download_button(
             label="Download Processed Data",
             data=df.to_csv(index=False),
-            file_name=f"{council}_{pd.Timestamp('now').strftime('%d_%m_%YT%H_%M_%S')}.csv",
+            file_name=f"{uploaded_file.name.split('.')[0]}_{pd.Timestamp('now').strftime('%d_%m_%YT%H_%M_%S')}.csv",
             mime="text/csv",
         )
 
