@@ -180,8 +180,9 @@ def transform_df(new_df, unique_identifier, date_format):
 
 def app():
 
-    with open("data_processor/data/pdf_config.json", "r") as file:
-        pdf_config = json.load(file)
+    pdf_config = pd.read_csv(
+        "data_processor/data/pdf_config.csv", index_col=0
+    ).to_dict()
 
     # Title of the application
     st.title("PDF Processor")
@@ -200,7 +201,7 @@ def app():
 
         council = st.selectbox("Select Council:", tuple(sorted(pdf_config.keys())))
 
-        gridlines = pdf_config[council]["gridlines"]
+        gridlines = eval(pdf_config[council]["gridlines"])
         unique_identifier = [item["label"] for item in gridlines][0]
         date_format = pdf_config[council]["date_format"]
         pdf_path = f"pdf_files/tabular/{council}.pdf"
