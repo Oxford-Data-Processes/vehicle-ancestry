@@ -180,9 +180,11 @@ def transform_df(new_df, unique_identifier, date_format):
 
 def app():
 
-    pdf_config = pd.read_csv(
-        "data_processor/data/pdf_config.csv", index_col=0
-    ).to_dict()
+    pdf_config = (
+        pd.read_csv("data_processor/data/pdf_config.csv", index_col=0)
+        .transpose()
+        .to_dict()
+    )
 
     # Title of the application
     st.title("PDF Processor")
