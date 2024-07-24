@@ -2,8 +2,7 @@ import streamlit as st
 import pandas as pd
 import datetime
 import requests
-import boto3
-from botocore.exceptions import NoCredentialsError
+from io import StringIO
 
 
 def download_config(file_name, label, mime):
@@ -22,6 +21,8 @@ def download_config(file_name, label, mime):
         mime=mime,
     )
 
+    return data
+
 
 def upload_config(uploaded_file):
     if uploaded_file is not None:
@@ -37,7 +38,7 @@ def app():
     st.title("Excel Config")
 
     # Download the current config
-    download_config(
+    data = download_config(
         "excel_mappings.csv",
         "Download Excel Column Mappings",
         "text/csv",
@@ -50,8 +51,9 @@ def app():
 
     # Display the current config
     st.write("Current Excel Column Mappings:")
-    df_mappings = pd.read_csv("data_processor/data/excel_mappings.csv")
-    st.dataframe(df_mappings)
+
+    excel_config = pd.read_csv(StringIO(data), index_col=0)
+    st.dataframe(excel_config)
 
 
 if __name__ == "__main__":

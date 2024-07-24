@@ -3,7 +3,8 @@ import pandas as pd
 import fitz  # PyMuPDF
 import io
 import pdfplumber
-import json
+import requests
+from io import StringIO
 
 
 def display_first_two_pdf_pages(pdf_bytes):
@@ -178,13 +179,20 @@ def transform_df(new_df, unique_identifier, date_format):
     return new_df
 
 
+def download_config(file_name):
+
+    url = f"https://vehicle-ancestry-bucket-654654324108.s3.amazonaws.com/{file_name}"
+    response = requests.get(url, stream=True)
+    response.raise_for_status()
+    data = response.content.decode("utf-8")
+
+    df = pd.read_csv(StringIO(data))
+    return df
+
+
 def app():
 
-    pdf_config = (
-        pd.read_csv("data_processor/data/pdf_config.csv", index_col=0)
-        .transpose()
-        .to_dict()
-    )
+    pdf_config = download_config("pdf_config.csv")
 
     # Title of the application
     st.title("PDF Processor")

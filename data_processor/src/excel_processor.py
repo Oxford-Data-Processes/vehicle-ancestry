@@ -1,10 +1,22 @@
 import streamlit as st
 import pandas as pd
-import json
+import requests
+from io import StringIO
+
+
+def download_config(file_name):
+
+    url = f"https://vehicle-ancestry-bucket-654654324108.s3.amazonaws.com/{file_name}"
+    response = requests.get(url, stream=True)
+    response.raise_for_status()
+    data = response.content.decode("utf-8")
+
+    df = pd.read_csv(StringIO(data))
+    return df
 
 
 def app():
-    df_mappings = pd.read_csv("data_processor/data/excel_mappings.csv")
+    df_mappings = download_config("excel_mappings.csv")
 
     # Title of the application
     st.title("Excel Processor")
