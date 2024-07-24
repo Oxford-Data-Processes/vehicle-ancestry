@@ -27,3 +27,7 @@ uwstr4,reg
 vehicle_registration_number,reg
 model_3,model
 licence_date_from,date_from
+registration_number,reg
+commences,date_from
+vehicle_description,make
+expires,date_to

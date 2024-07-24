@@ -36,15 +36,6 @@ def app():
         rename_dict = dict(zip(df_mappings["raw_value"], df_mappings["mapped_value"]))
         df.rename(columns=rename_dict, inplace=True)
 
-        if "date_from" in df.columns:
-            df["date_from"] = pd.to_datetime(
-                df["date_from"], errors="coerce"
-            ).dt.strftime("%d/%m/%Y")
-        if "date_to" in df.columns:
-            df["date_to"] = pd.to_datetime(df["date_to"], errors="coerce").dt.strftime(
-                "%d/%m/%Y"
-            )
-
         final_columns = ["reg", "make", "model", "date_from", "date_to"]
         existing_columns = [col for col in final_columns if col in df.columns]
         df = df[existing_columns]

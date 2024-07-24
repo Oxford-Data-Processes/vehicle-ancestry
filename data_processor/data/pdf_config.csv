@@ -7,6 +7,7 @@ Calderdale,"[{'interval': [100, 220], 'label': 'reg'}, {'interval': [220, 340], 
 Cheshire West,"[{'interval': [52, 160], 'label': 'make'}, {'interval': [160, 478], 'label': 'model'}, {'interval': [478, 540], 'label': 'reg'}]",
 Corby,"[{'interval': [312, 390], 'label': 'date_from'}, {'interval': [390, 460], 'label': 'reg'}, {'interval': [460, 538], 'label': 'make'}, {'interval': [538, 600], 'label': 'model'}]",%d.%m.%Y
 Cornwall,"[{'interval': [28, 121], 'label': 'reference_number'}, {'interval': [208, 318], 'label': 'reg'}, {'interval': [318, 416], 'label': 'make'}, {'interval': [416, 570], 'label': 'model'}, {'interval': [618, 700], 'label': 'date_to'}]",%d/%m/%Y
+Daventry,"[{'interval': [32, 88], 'label': 'plate'}, {'interval': [320, 416], 'label': 'reg'}, {'interval': [416, 540], 'label': 'make'}]",%d/%m/%Y
 Derby,"[{'interval': [32, 88], 'label': 'plate'}, {'interval': [320, 416], 'label': 'reg'}, {'interval': [416, 540], 'label': 'make'}]",
 East Dunbarton,"[{'interval': [76, 150], 'label': 'reg'}, {'interval': [150, 240], 'label': 'make'}, {'interval': [240, 400], 'label': 'model'}]",
 East Northamptonshire,"[{'interval': [55, 130], 'label': 'reg'}, {'interval': [160, 240], 'label': 'make'}, {'interval': [240, 540], 'label': 'model'}]",
@@ -37,3 +38,4 @@ West Lothian,"[{'interval': [184, 295], 'label': 'reg'}, {'interval': [295, 372]
 West Morland Barrow,"[{'interval': [55, 118], 'label': 'reg'}, {'interval': [118, 200], 'label': 'make'}, {'interval': [200, 300], 'label': 'model'}]",
 Wigan,"[{'interval': [200, 324], 'label': 'plate'}, {'interval': [324, 436], 'label': 'reg'}, {'interval': [436, 538], 'label': 'make'}, {'interval': [538, 654], 'label': 'model'}, {'interval': [1110, 1200], 'label': 'date_to'}]",%d/%m/%Y
 Wiltshire,"[{'interval': [2, 82], 'label': 'plate'}, {'interval': [128, 188], 'label': 'make'}, {'interval': [188, 272], 'label': 'model'}, {'interval': [272, 356], 'label': 'reg'}, {'interval': [356, 428], 'label': 'date_from'}, {'interval': [428, 540], 'label': 'date_to'}]",%d/%m/%Y
+York,"[{'interval': [2, 82], 'label': 'plate'}, {'interval': [128, 188], 'label': 'make'}, {'interval': [188, 272], 'label': 'model'}, {'interval': [272, 356], 'label': 'reg'}, {'interval': [356, 428], 'label': 'date_from'}, {'interval': [428, 540], 'label': 'date_to'}]",
