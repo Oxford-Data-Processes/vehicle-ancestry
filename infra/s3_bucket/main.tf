@@ -4,7 +4,7 @@ resource "aws_s3_bucket" "project_bucket" {
 
 data "aws_iam_policy_document" "project_bucket_policy" {
   statement {
-    actions   = ["s3:GetObject"]
+    actions   = ["s3:GetObject", "s3:PutObject"]
     resources = ["arn:aws:s3:::${aws_s3_bucket.project_bucket.bucket}/*"]
     principals {
       type        = "AWS"
