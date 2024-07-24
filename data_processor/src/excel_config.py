@@ -1,11 +1,18 @@
 import streamlit as st
 import pandas as pd
 import datetime
+import requests
+import boto3
+from botocore.exceptions import NoCredentialsError
 
 
-def download_config(file_path, label, file_name, mime):
-    with open(file_path, "r") as file:
-        data = file.read()
+def download_config(file_name, label, mime):
+
+    url = f"https://vehicle-ancestry-bucket-654654324108.s3.amazonaws.com/{file_name}"
+    response = requests.get(url, stream=True)
+    response.raise_for_status()
+    data = response.content.decode("utf-8")
+
     timestamp = datetime.datetime.now().strftime("%d_%m_%YT%H_%M_%S")
     file_name_with_timestamp = f"{file_name.split('.')[0]}_{timestamp}.csv"
     st.download_button(
@@ -18,9 +25,12 @@ def download_config(file_path, label, file_name, mime):
 
 def upload_config(uploaded_file):
     if uploaded_file is not None:
-        with open("data_processor/data/excel_mappings.csv", "wb") as f:
-            f.write(uploaded_file.getbuffer())
-        st.success("Config file uploaded successfully!")
+        url = "https://vehicle-ancestry-bucket-654654324108.s3.amazonaws.com/excel_mappings.csv"
+        response = requests.put(url, data=uploaded_file)
+        if response.status_code == 200:
+            st.success("File uploaded successfully.")
+        else:
+            st.error(f"Failed to upload file. Status code: {response.status_code}")
 
 
 def app():
@@ -28,9 +38,8 @@ def app():
 
     # Download the current config
     download_config(
-        "data_processor/data/excel_mappings.csv",
-        "Download Excel Column Mappings",
         "excel_mappings.csv",
+        "Download Excel Column Mappings",
         "text/csv",
     )
 
