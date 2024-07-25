@@ -211,16 +211,16 @@ def app():
 
         council = st.selectbox("Select Council:", tuple(sorted(pdf_config.keys())))
 
-        pdf_path = f"pdf_files/tabular/{council}.pdf"
-        with open(pdf_path, "wb") as f:
-            f.write(uploaded_file.getvalue())
-
         gridlines = eval(pdf_config[council]["gridlines"])
         unique_identifier = [item["label"] for item in gridlines][0]
         date_format = pdf_config[council]["date_format"]
         pdf_path = f"pdf_files/tabular/{council}.pdf"
 
         if st.button("Process PDF"):
+
+            pdf_path = f"pdf_files/tabular/{council}.pdf"
+            with open(pdf_path, "wb") as f:
+                f.write(uploaded_file.getvalue())
 
             df = extract_pdf_text(pdf_path)
             st.write("Pre-processed Data")
