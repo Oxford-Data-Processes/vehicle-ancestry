@@ -228,12 +228,16 @@ def app():
 
             st.write(pdf_config[council])
 
-            df = assign_intervals_and_values(df, gridlines)
-            df = process_consecutive_values(df, target_value=unique_identifier)
-            df_reduced = df[["text", "value"]].reset_index(drop=True)
-            dataframes_list = split_dataframe(df_reduced, unique_identifier)
-            new_df = process_dataframes(dataframes_list, unique_identifier)
-            new_df = transform_df(new_df, unique_identifier, date_format)
+            try:
+                df = assign_intervals_and_values(df, gridlines)
+                df = process_consecutive_values(df, target_value=unique_identifier)
+                df_reduced = df[["text", "value"]].reset_index(drop=True)
+                dataframes_list = split_dataframe(df_reduced, unique_identifier)
+                new_df = process_dataframes(dataframes_list, unique_identifier)
+                new_df = transform_df(new_df, unique_identifier, date_format)
+            except Exception as e:
+                st.error(f"An error occurred during PDF processing: {str(e)}")
+                return
 
             st.write("Processed Data")
             st.dataframe(new_df)
