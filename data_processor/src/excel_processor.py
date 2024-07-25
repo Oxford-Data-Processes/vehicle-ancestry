@@ -29,18 +29,16 @@ def app():
     if process_data:
         # To read file as bytes:
         bytes_data = uploaded_file.getvalue()
-
-        df = pd.read_excel(
-            bytes_data,
-            sheet_name=0,
-            parse_dates=True,
-            date_parser=lambda x: (
-                pd.to_datetime(x, format="%d/%m/%Y", errors="coerce")
-            ),
-        )
+        df = pd.read_excel(bytes_data, sheet_name=0, parse_dates=True)
         df.columns = [
             col.replace(" ", "_").replace(":", "").strip().lower() for col in df.columns
         ]
+
+        # Convert date columns to string format to preserve original formatting
+        date_columns = df.select_dtypes(include=["datetime64"]).columns
+        for col in date_columns:
+            df[col] = df[col].dt.strftime("%d/%m/%Y")
+
         st.write("Uploaded Excel file:")
         st.dataframe(df)
 
