@@ -5,6 +5,7 @@ import io
 import pdfplumber
 import requests
 from io import StringIO
+import os
 
 
 def display_first_two_pdf_pages(pdf_bytes):
@@ -186,17 +187,16 @@ def download_config(file_name):
     response.raise_for_status()
     data = response.content.decode("utf-8")
 
-    df = pd.read_csv(StringIO(data))
+    df = pd.read_csv(StringIO(data), index_col=0)
     return df
 
 
 def app():
 
-    pdf_config = download_config("pdf_config.csv")
+    pdf_config = download_config("pdf_config.csv").transpose().to_dict()
 
     # Title of the application
     st.title("PDF Processor")
-
     # File uploader allows user to add their own PDF
     uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 
@@ -210,6 +210,10 @@ def app():
         display_first_two_pdf_pages(bytes_data)
 
         council = st.selectbox("Select Council:", tuple(sorted(pdf_config.keys())))
+
+        pdf_path = f"pdf_files/tabular/{council}.pdf"
+        with open(pdf_path, "wb") as f:
+            f.write(uploaded_file.getvalue())
 
         gridlines = eval(pdf_config[council]["gridlines"])
         unique_identifier = [item["label"] for item in gridlines][0]
