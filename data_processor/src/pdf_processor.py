@@ -235,6 +235,21 @@ def app():
             new_df = process_dataframes(dataframes_list, unique_identifier)
             new_df = transform_df(new_df, unique_identifier, date_format)
 
+            if "reg" not in new_df.columns:
+                st.error("Error: 'reg' column is missing from the processed data.")
+                return
+
+            date_columns = ["date_from", "date_to"]
+            if not any(col in new_df.columns for col in date_columns):
+                st.error(
+                    "Error: At least one date column ('date_from' or 'date_to') is missing from the processed data."
+                )
+                return
+
+            st.success(
+                "Validation passed: Required columns are present in the processed data."
+            )
+
             st.write("Processed Data")
             st.dataframe(new_df)
 
