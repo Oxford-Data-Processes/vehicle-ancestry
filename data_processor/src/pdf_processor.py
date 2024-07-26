@@ -239,13 +239,6 @@ def app():
                 st.error("Error: 'reg' column is missing from the processed data.")
                 return
 
-            date_columns = ["date_from", "date_to"]
-            if not any(col in new_df.columns for col in date_columns):
-                st.error(
-                    "Error: At least one date column ('date_from' or 'date_to') is missing from the processed data."
-                )
-                return
-
             st.success(
                 "Validation passed: Required columns are present in the processed data."
             )

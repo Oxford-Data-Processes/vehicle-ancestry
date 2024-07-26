@@ -50,18 +50,8 @@ def app():
         existing_columns = [col for col in final_columns if col in df.columns]
         df = df[existing_columns]
 
-        # Check if at least one date column and reg are included in the df
-        required_columns = ["reg"]
-        date_columns = ["date_from", "date_to"]
-
         if "reg" not in df.columns:
             st.error("Error: 'reg' column is missing from the processed data.")
-            return
-
-        if not any(col in df.columns for col in date_columns):
-            st.error(
-                "Error: At least one date column ('date_from' or 'date_to') is missing from the processed data."
-            )
             return
 
         st.success(
