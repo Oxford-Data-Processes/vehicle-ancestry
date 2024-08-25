@@ -9,6 +9,7 @@ import os
 from typing import List, Dict, Tuple, Optional
 
 
+
 def display_first_two_pdf_pages(pdf_bytes: bytes) -> None:
     """
     Display the first two pages of a PDF file.
@@ -267,7 +268,7 @@ def download_config(file_name: str) -> pd.DataFrame:
     Returns:
         pd.DataFrame: DataFrame containing the configuration data.
     """
-    url = f"https://vehicle-ancestry-bucket-654654324108.s3.amazonaws.com/{file_name}"
+    url = f"{AWS_PRESIGNED_URL}/{file_name}"
     response = requests.get(url, stream=True)
     response.raise_for_status()
     data = response.content.decode("utf-8")

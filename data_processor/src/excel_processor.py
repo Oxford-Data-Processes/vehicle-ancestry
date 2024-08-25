@@ -3,7 +3,7 @@ import pandas as pd
 import requests
 from io import StringIO
 from typing import Dict
-
+from variables import AWS_PRESIGNED_URL
 
 def download_config(file_name: str) -> pd.DataFrame:
     """
@@ -15,7 +15,7 @@ def download_config(file_name: str) -> pd.DataFrame:
     Returns:
         pd.DataFrame: DataFrame containing the downloaded configuration.
     """
-    url = f"https://vehicle-ancestry-bucket-654654324108.s3.amazonaws.com/{file_name}"
+    url = f"{AWS_PRESIGNED_URL}/{file_name}"
     response = requests.get(url, stream=True)
     response.raise_for_status()
     data = response.content.decode("utf-8")

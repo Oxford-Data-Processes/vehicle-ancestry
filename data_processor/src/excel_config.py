@@ -4,7 +4,7 @@ import datetime
 import requests
 from io import StringIO
 from typing import Optional
-
+from variables import AWS_PRESIGNED_URL
 
 def download_config(file_name: str, label: str, mime: str) -> str:
     """
@@ -18,7 +18,7 @@ def download_config(file_name: str, label: str, mime: str) -> str:
     Returns:
         str: Content of the downloaded file.
     """
-    url = f"https://vehicle-ancestry-bucket-654654324108.s3.amazonaws.com/{file_name}"
+    url = f"{AWS_PRESIGNED_URL}/{file_name}"
     response = requests.get(url, stream=True)
     response.raise_for_status()
     data = response.content.decode("utf-8")
@@ -43,7 +43,7 @@ def upload_config(uploaded_file: Optional[st.UploadedFile]) -> None:
         uploaded_file (Optional[st.UploadedFile]): File uploaded by the user.
     """
     if uploaded_file is not None:
-        url = "https://vehicle-ancestry-bucket-654654324108.s3.amazonaws.com/excel_mappings.csv"
+        url = f"{AWS_PRESIGNED_URL}/excel_mappings.csv"
         response = requests.put(url, data=uploaded_file)
         if response.status_code == 200:
             st.success("File uploaded successfully.")
