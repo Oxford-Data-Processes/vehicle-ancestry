@@ -3,18 +3,22 @@ from pdf_processor import app as pdf_processor
 from excel_processor import app as excel_processor
 from pdf_config import app as pdf_config
 from excel_config import app as excel_config
+from typing import Dict
 
 
 # Dummy user credentials
-USER_CREDENTIALS = {
+USER_CREDENTIALS: Dict[str, str] = {
     "admin": "vehicleancestry",
 }
 
 
-def login():
+def login() -> None:
+    """
+    Display the login page and handle user authentication.
+    """
     st.title("Login")
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
+    username: str = st.text_input("Username")
+    password: str = st.text_input("Password", type="password")
     if st.button("Login"):
         if username in USER_CREDENTIALS and USER_CREDENTIALS[username] == password:
             st.session_state["logged_in"] = True
@@ -24,11 +28,14 @@ def login():
             st.error("Invalid username or password")
 
 
-def main_app():
+def main_app() -> None:
+    """
+    Display the main application interface after successful login.
+    """
     st.set_page_config(layout="wide")
 
     # Define the navigation structure
-    apps = {
+    apps: Dict[str, str] = {
         "PDF Processor": "pdf_processor",
         "Excel Processor": "excel_processor",
         "PDF Config": "pdf_config",
@@ -36,7 +43,7 @@ def main_app():
     }
 
     # Add a selectbox to the sidebar for navigation
-    selected_app = st.sidebar.selectbox("Choose an app", list(apps.keys()))
+    selected_app: str = st.sidebar.selectbox("Choose an app", list(apps.keys()))
 
     if selected_app == "PDF Config":
         pdf_config()

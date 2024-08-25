@@ -6,9 +6,16 @@ import pdfplumber
 import requests
 from io import StringIO
 import os
+from typing import List, Dict, Tuple, Optional
 
 
-def display_first_two_pdf_pages(pdf_bytes):
+def display_first_two_pdf_pages(pdf_bytes: bytes) -> None:
+    """
+    Display the first two pages of a PDF file.
+
+    Args:
+        pdf_bytes (bytes): The PDF file content in bytes.
+    """
     # Load the PDF file from bytes
     pdf = fitz.open("pdf", pdf_bytes)
     num_pages = len(pdf)
@@ -40,7 +47,16 @@ def display_first_two_pdf_pages(pdf_bytes):
     pdf.close()
 
 
-def extract_pdf_text(pdf_path):
+def extract_pdf_text(pdf_path: str) -> pd.DataFrame:
+    """
+    Extract text and bounding box information from a PDF file.
+
+    Args:
+        pdf_path (str): Path to the PDF file.
+
+    Returns:
+        pd.DataFrame: DataFrame containing extracted text and bounding box information.
+    """
     # Open the PDF file
     with pdfplumber.open(pdf_path) as pdf:
         # Initialize an empty list to store the extracted data
@@ -63,7 +79,17 @@ def extract_pdf_text(pdf_path):
         return df
 
 
-def find_interval(number, intervals):
+def find_interval(number: float, intervals: List[Tuple[float, float]]) -> Optional[Tuple[float, float]]:
+    """
+    Find the interval that contains a given number.
+
+    Args:
+        number (float): The number to find an interval for.
+        intervals (List[Tuple[float, float]]): List of intervals to search.
+
+    Returns:
+        Optional[Tuple[float, float]]: The interval containing the number, or None if not found.
+    """
     intervals = sorted(intervals)
     for interval in intervals:
         if number >= interval[0] and number < interval[1]:
@@ -71,7 +97,17 @@ def find_interval(number, intervals):
     return None
 
 
-def assign_intervals_and_values(df, gridlines):
+def assign_intervals_and_values(df: pd.DataFrame, gridlines: List[Dict[str, Any]]) -> pd.DataFrame:
+    """
+    Assign intervals and values to DataFrame based on gridlines.
+
+    Args:
+        df (pd.DataFrame): Input DataFrame.
+        gridlines (List[Dict[str, Any]]): List of gridline dictionaries.
+
+    Returns:
+        pd.DataFrame: DataFrame with assigned intervals and values.
+    """
     # Create a list of intervals from the gridlines
     intervals = [item["interval"] for item in gridlines]
     df["interval"] = df["x0"].apply(lambda x: find_interval(x, intervals))
@@ -85,7 +121,17 @@ def assign_intervals_and_values(df, gridlines):
     return df
 
 
-def process_consecutive_values(df, target_value):
+def process_consecutive_values(df: pd.DataFrame, target_value: str) -> pd.DataFrame:
+    """
+    Process consecutive values in DataFrame.
+
+    Args:
+        df (pd.DataFrame): Input DataFrame.
+        target_value (str): Target value to process.
+
+    Returns:
+        pd.DataFrame: Processed DataFrame.
+    """
     processed_rows = []
     current_row = None
 
@@ -111,7 +157,17 @@ def process_consecutive_values(df, target_value):
     return pd.DataFrame(processed_rows)
 
 
-def split_dataframe(df_reduced, unique_identifier):
+def split_dataframe(df_reduced: pd.DataFrame, unique_identifier: str) -> List[pd.DataFrame]:
+    """
+    Split DataFrame into chunks based on unique identifier.
+
+    Args:
+        df_reduced (pd.DataFrame): Input DataFrame.
+        unique_identifier (str): Unique identifier to split on.
+
+    Returns:
+        List[pd.DataFrame]: List of split DataFrames.
+    """
     # Initialize an empty list to store the dataframes
     dataframes_list = []
 
@@ -132,7 +188,17 @@ def split_dataframe(df_reduced, unique_identifier):
     return dataframes_list
 
 
-def process_dataframes(dataframes_list, unique_identifier):
+def process_dataframes(dataframes_list: List[pd.DataFrame], unique_identifier: str) -> pd.DataFrame:
+    """
+    Process list of DataFrames into a single DataFrame.
+
+    Args:
+        dataframes_list (List[pd.DataFrame]): List of DataFrames to process.
+        unique_identifier (str): Unique identifier column.
+
+    Returns:
+        pd.DataFrame: Processed DataFrame.
+    """
     new_dataframes_list = []
 
     for df in dataframes_list:
@@ -148,7 +214,18 @@ def process_dataframes(dataframes_list, unique_identifier):
     return new_df
 
 
-def transform_df(new_df, unique_identifier, date_format):
+def transform_df(new_df: pd.DataFrame, unique_identifier: str, date_format: Optional[str]) -> pd.DataFrame:
+    """
+    Transform DataFrame by applying various operations.
+
+    Args:
+        new_df (pd.DataFrame): Input DataFrame.
+        unique_identifier (str): Unique identifier column.
+        date_format (Optional[str]): Date format string.
+
+    Returns:
+        pd.DataFrame: Transformed DataFrame.
+    """
     new_df["reg"] = new_df["reg"].str.replace(" ", "")
 
     # Filter rows where "reg" column matches the specified pattern
@@ -180,8 +257,16 @@ def transform_df(new_df, unique_identifier, date_format):
     return new_df
 
 
-def download_config(file_name):
+def download_config(file_name: str) -> pd.DataFrame:
+    """
+    Download configuration file from S3 bucket.
 
+    Args:
+        file_name (str): Name of the file to download.
+
+    Returns:
+        pd.DataFrame: DataFrame containing the configuration data.
+    """
     url = f"https://vehicle-ancestry-bucket-654654324108.s3.amazonaws.com/{file_name}"
     response = requests.get(url, stream=True)
     response.raise_for_status()
@@ -191,8 +276,10 @@ def download_config(file_name):
     return df
 
 
-def app():
-
+def app() -> None:
+    """
+    Main application function for PDF Processor.
+    """
     pdf_config = download_config("pdf_config.csv").transpose().to_dict()
 
     # Title of the application

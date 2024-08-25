@@ -3,10 +3,21 @@ import pandas as pd
 import datetime
 import requests
 from io import StringIO
+from typing import Optional
 
 
-def download_config(file_name, label, mime):
+def download_config(file_name: str, label: str, mime: str) -> str:
+    """
+    Download configuration file from S3 bucket and create a download button.
 
+    Args:
+        file_name (str): Name of the file to download.
+        label (str): Label for the download button.
+        mime (str): MIME type of the file.
+
+    Returns:
+        str: Content of the downloaded file.
+    """
     url = f"https://vehicle-ancestry-bucket-654654324108.s3.amazonaws.com/{file_name}"
     response = requests.get(url, stream=True)
     response.raise_for_status()
@@ -24,7 +35,13 @@ def download_config(file_name, label, mime):
     return data
 
 
-def upload_config(uploaded_file):
+def upload_config(uploaded_file: Optional[st.UploadedFile]) -> None:
+    """
+    Upload configuration file to S3 bucket.
+
+    Args:
+        uploaded_file (Optional[st.UploadedFile]): File uploaded by the user.
+    """
     if uploaded_file is not None:
         url = "https://vehicle-ancestry-bucket-654654324108.s3.amazonaws.com/excel_mappings.csv"
         response = requests.put(url, data=uploaded_file)
@@ -34,7 +51,10 @@ def upload_config(uploaded_file):
             st.error(f"Failed to upload file. Status code: {response.status_code}")
 
 
-def app():
+def app() -> None:
+    """
+    Main application function for Excel Config page.
+    """
     st.title("Excel Config")
 
     # Download the current config

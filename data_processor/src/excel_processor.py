@@ -2,10 +2,19 @@ import streamlit as st
 import pandas as pd
 import requests
 from io import StringIO
+from typing import Dict
 
 
-def download_config(file_name):
+def download_config(file_name: str) -> pd.DataFrame:
+    """
+    Download configuration file from S3 bucket and return as a DataFrame.
 
+    Args:
+        file_name (str): Name of the file to download.
+
+    Returns:
+        pd.DataFrame: DataFrame containing the downloaded configuration.
+    """
     url = f"https://vehicle-ancestry-bucket-654654324108.s3.amazonaws.com/{file_name}"
     response = requests.get(url, stream=True)
     response.raise_for_status()
@@ -15,7 +24,10 @@ def download_config(file_name):
     return df
 
 
-def app():
+def app() -> None:
+    """
+    Main application function for Excel Processor page.
+    """
     df_mappings = download_config("excel_mappings.csv")
 
     # Title of the application
@@ -43,11 +55,11 @@ def app():
         st.dataframe(df)
 
         # Create a dictionary for renaming columns
-        rename_dict = dict(zip(df_mappings["raw_value"], df_mappings["mapped_value"]))
+        rename_dict: Dict[str, str] = dict(zip(df_mappings["raw_value"], df_mappings["mapped_value"]))
         df.rename(columns=rename_dict, inplace=True)
 
-        final_columns = ["reg", "make", "model", "date_from", "date_to"]
-        existing_columns = [col for col in final_columns if col in df.columns]
+        final_columns: List[str] = ["reg", "make", "model", "date_from", "date_to"]
+        existing_columns: List[str] = [col for col in final_columns if col in df.columns]
         df = df[existing_columns]
 
         if "reg" not in df.columns:
