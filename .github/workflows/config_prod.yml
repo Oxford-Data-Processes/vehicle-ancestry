@@ -38,6 +38,6 @@ jobs:
       - name: Terraform Setup & Apply
         run: |
           terraform fmt -check
-          terraform init -backend-config=backend/backend_config_dev.tfvars
+          terraform init -backend-config=backend/backend_config_prod.tfvars
           terraform plan -no-color -var-file env.tfvars
           terraform apply -auto-approve -var-file env.tfvars
