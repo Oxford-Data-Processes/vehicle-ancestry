@@ -7,6 +7,7 @@ import requests
 from io import StringIO
 import os
 from typing import List, Dict, Tuple, Optional, Any
+from variables import AWS_PRESIGNED_URL
 
 
 def display_first_two_pdf_pages(pdf_bytes: bytes) -> None:
