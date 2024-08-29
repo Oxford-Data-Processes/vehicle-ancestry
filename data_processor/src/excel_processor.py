@@ -5,6 +5,7 @@ from io import StringIO
 from typing import Dict
 from variables import AWS_PRESIGNED_URL
 
+
 def download_config(file_name: str) -> pd.DataFrame:
     """
     Download configuration file from S3 bucket and return as a DataFrame.
@@ -55,11 +56,15 @@ def app() -> None:
         st.dataframe(df)
 
         # Create a dictionary for renaming columns
-        rename_dict: Dict[str, str] = dict(zip(df_mappings["raw_value"], df_mappings["mapped_value"]))
+        rename_dict: Dict[str, str] = dict(
+            zip(df_mappings["raw_value"], df_mappings["mapped_value"])
+        )
         df.rename(columns=rename_dict, inplace=True)
 
         final_columns: List[str] = ["reg", "make", "model", "date_from", "date_to"]
-        existing_columns: List[str] = [col for col in final_columns if col in df.columns]
+        existing_columns: List[str] = [
+            col for col in final_columns if col in df.columns
+        ]
         df = df[existing_columns]
 
         if "reg" not in df.columns:
