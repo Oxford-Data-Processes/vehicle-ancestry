@@ -6,8 +6,7 @@ import pdfplumber
 import requests
 from io import StringIO
 import os
-from typing import List, Dict, Tuple, Optional
-
+from typing import List, Dict, Tuple, Optional, Any
 
 
 def display_first_two_pdf_pages(pdf_bytes: bytes) -> None:
@@ -80,7 +79,9 @@ def extract_pdf_text(pdf_path: str) -> pd.DataFrame:
         return df
 
 
-def find_interval(number: float, intervals: List[Tuple[float, float]]) -> Optional[Tuple[float, float]]:
+def find_interval(
+    number: float, intervals: List[Tuple[float, float]]
+) -> Optional[Tuple[float, float]]:
     """
     Find the interval that contains a given number.
 
@@ -98,7 +99,9 @@ def find_interval(number: float, intervals: List[Tuple[float, float]]) -> Option
     return None
 
 
-def assign_intervals_and_values(df: pd.DataFrame, gridlines: List[Dict[str, Any]]) -> pd.DataFrame:
+def assign_intervals_and_values(
+    df: pd.DataFrame, gridlines: List[Dict[str, Any]]
+) -> pd.DataFrame:
     """
     Assign intervals and values to DataFrame based on gridlines.
 
@@ -158,7 +161,9 @@ def process_consecutive_values(df: pd.DataFrame, target_value: str) -> pd.DataFr
     return pd.DataFrame(processed_rows)
 
 
-def split_dataframe(df_reduced: pd.DataFrame, unique_identifier: str) -> List[pd.DataFrame]:
+def split_dataframe(
+    df_reduced: pd.DataFrame, unique_identifier: str
+) -> List[pd.DataFrame]:
     """
     Split DataFrame into chunks based on unique identifier.
 
@@ -189,7 +194,9 @@ def split_dataframe(df_reduced: pd.DataFrame, unique_identifier: str) -> List[pd
     return dataframes_list
 
 
-def process_dataframes(dataframes_list: List[pd.DataFrame], unique_identifier: str) -> pd.DataFrame:
+def process_dataframes(
+    dataframes_list: List[pd.DataFrame], unique_identifier: str
+) -> pd.DataFrame:
     """
     Process list of DataFrames into a single DataFrame.
 
@@ -215,7 +222,9 @@ def process_dataframes(dataframes_list: List[pd.DataFrame], unique_identifier: s
     return new_df
 
 
-def transform_df(new_df: pd.DataFrame, unique_identifier: str, date_format: Optional[str]) -> pd.DataFrame:
+def transform_df(
+    new_df: pd.DataFrame, unique_identifier: str, date_format: Optional[str]
+) -> pd.DataFrame:
     """
     Transform DataFrame by applying various operations.
 
