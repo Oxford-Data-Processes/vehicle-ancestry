@@ -6,6 +6,7 @@ from io import StringIO
 from typing import Optional
 from variables import AWS_PRESIGNED_URL
 
+
 def download_config(file_name: str, label: str, mime: str) -> str:
     """
     Download configuration file from S3 bucket and create a download button.
@@ -35,12 +36,12 @@ def download_config(file_name: str, label: str, mime: str) -> str:
     return data
 
 
-def upload_config(uploaded_file: Optional[st.UploadedFile]) -> None:
+def upload_config(uploaded_file) -> None:
     """
     Upload configuration file to S3 bucket.
 
     Args:
-        uploaded_file (Optional[st.UploadedFile]): File uploaded by the user.
+        uploaded_file: File uploaded by the user.
     """
     if uploaded_file is not None:
         url = f"{AWS_PRESIGNED_URL}/excel_mappings.csv"
